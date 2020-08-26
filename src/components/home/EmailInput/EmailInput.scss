@@ -1,0 +1,33 @@
+.email-container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.email-input {
+  text-align: center;
+}
+
+@media (min-width: 630px) {
+  .email-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .email-input {
+    display: flex;
+    text-align: right;
+    width: 60%;
+    align-self: center;
+  }
+
+  .email-input-wrapper {
+    .input-pair {
+      float: right;
+      min-width: 250px;
+    }
+  }
+
+  .email-input-wrapper a button {
+    float: right;
+  }
+}

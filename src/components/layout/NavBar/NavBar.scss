@@ -1,0 +1,126 @@
+.navbar-container {
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: fixed;
+  width: 100%;
+}
+
+.nav-links {
+  display: none;
+}
+
+.navbar-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px;
+  max-width: 1220px;
+  margin: 0 auto;
+}
+
+.navbar-logo img {
+  width: 23px;
+  margin-top: 3px;
+}
+
+.navbar-mobile-menu {
+  text-align: right;
+  justify-items: right;
+  align-items: center;
+  display: grid;
+}
+
+.nav-mobile-bars {
+  .bar1,
+  .bar2,
+  .bar3 {
+    background-color: #393939;
+    width: 20px;
+    height: 3px;
+    margin: 3px 0 0;
+    transition: 0.15s ease;
+  }
+}
+
+.nav-mobile-bars.active {
+  .bar1 {
+    background-color: #ba2329;
+    transform: translateY(6px) rotate(45deg);
+    -webkit-transform: translateY(6px) rotate(45deg);
+  }
+  .bar2 {
+    opacity: 0;
+  }
+  .bar3 {
+    background-color: #ba2329;
+    transform: translateY(-6px) rotate(-45deg);
+    -webkit-transform: translateY(-6px) rotate(-45deg);
+  }
+}
+
+.nav-mobile-links {
+  max-height: 0px;
+  margin-top: -4px;
+  overflow: hidden;
+  text-align: center;
+  transition: 0.55s;
+  opacity: 1;
+}
+
+.nav-mobile-links ul,
+.nav-links ul {
+  list-style: none;
+}
+
+.nav-mobile-links.active {
+  max-height: 100vh;
+}
+
+.nav-mobile-entry {
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 200;
+  font-size: 14px;
+  text-align: left;
+}
+
+.nav-mobile-entry.active {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+@media (min-width: 630px) {
+  .nav-mobile-links,
+  .navbar-mobile-menu {
+    display: none;
+  }
+
+  .navbar-container {
+    height: 70px;
+  }
+
+  .nav-links {
+    display: block;
+  }
+
+  .nav-links ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: right;
+    align-items: center;
+  }
+
+  .nav-entry {
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 200;
+    font-size: 14px;
+  }
+
+  .nav-entry.active {
+    font-weight: 800;
+  }
+
+  .navbar-logo img {
+    width: 50px;
+    margin-top: 0px;
+  }
+}

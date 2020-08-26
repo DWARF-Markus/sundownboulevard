@@ -1,0 +1,186 @@
+$black: #393939;
+$red: #ba2329;
+$blue: #007ddb;
+$dark-gray: #e1e1e1;
+$light-gray: #f3f3f3;
+$white: #ffffff;
+
+// BASIC
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.logo-text {
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 200;
+  font-size: 14px;
+  color: $red;
+  opacity: 0.8;
+}
+
+.page-wrapper {
+  padding-top: 50px;
+  max-width: 1220px;
+  margin: 0 auto;
+}
+
+.block {
+  height: 350px;
+  border: 2px solid gray;
+}
+
+@media (min-width: 630px) {
+  .page-wrapper {
+    padding-top: 70px;
+  }
+}
+
+// FONTS
+
+html,
+body {
+  font-family: "Helvetica", sans-serif;
+}
+
+p {
+  color: #737b7dd0;
+}
+
+h3 {
+  color: $black;
+  font-size: 22px;
+}
+
+// INPUT FIELDS
+
+.input-pair {
+  display: grid;
+}
+
+.input-pair label {
+  text-transform: uppercase;
+  font-size: 10px;
+  text-align: left;
+  font-weight: 600;
+  color: $black;
+  margin: 4px 1px;
+}
+
+.input-pair input {
+  border: 1px solid $dark-gray;
+  border-radius: 3px;
+  padding: 5px;
+  width: 100%;
+  transition: 0.14s ease;
+}
+
+input:focus {
+  outline: none;
+}
+
+.input-pair input:focus {
+  border: 1px solid $black;
+}
+
+// COLORS
+
+.black {
+  background-color: $black;
+}
+
+.red {
+  background-color: $red;
+}
+
+.blue {
+  background-color: $blue;
+}
+
+.dark-gray {
+  background-color: $dark-gray;
+}
+
+.light-gray {
+  background-color: $light-gray;
+}
+
+.white {
+  background-color: $white;
+}
+
+.black-text {
+  color: $black !important;
+}
+
+.red-text {
+  color: $red !important;
+}
+
+.blue-text {
+  color: $blue;
+}
+
+.dark-gray-text {
+  color: $dark-gray;
+}
+
+.light-gray-text {
+  color: $light-gray;
+}
+
+.white-text {
+  color: $white;
+}
+
+// MARGINS & PADDINGS
+
+.m-1 {
+  margin: 1rem;
+}
+
+.m-2 {
+  margin: 2rem;
+}
+
+.mt-1 {
+  margin: 1rem 0;
+}
+
+.mt-2 {
+  margin: 2rem 0;
+}
+
+.mx-1 {
+  margin: 0 1rem;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.p-2 {
+  padding: 1rem;
+}
+
+.pt-1 {
+  padding: 1rem 0;
+}
+
+.pt-2 {
+  padding: 1rem 0;
+}
+
+.px-1 {
+  padding: 0 1rem;
+}
+
+.px-2 {
+  padding: 0 2rem;
+}
