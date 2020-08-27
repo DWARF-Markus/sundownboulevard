@@ -1,23 +1,15 @@
 import React from "react";
 import Dot from "./Dot";
+import "./Dots.scss";
 
-const Dots = ({ slides, activeIndex }) => {
-  const dotsStyle = {
-    position: "absolute",
-    bottom: "25px",
-    width: "100%",
-    display: "flex",
-    alignItmes: "center",
-    justifyContent: "center",
-  };
-
+function Dots({ slides, activeIndex }) {
   return (
-    <div style={dotsStyle}>
+    <div className="dots-container">
       {slides.map((slide, i) => (
         <Dot key={slide} active={activeIndex === i} />
       ))}
     </div>
   );
-};
+}
 
 export default Dots;

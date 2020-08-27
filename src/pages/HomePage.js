@@ -4,6 +4,7 @@ import "./HomePage.scss";
 import PrimaryBtn from "../components/ui/PrimaryBtn/PrimaryBtn";
 import Slider from "../components/home/Slider/Slider";
 import EmailInput from "../components/home/EmailInput/EmailInput";
+import ContentBox from "../components/home/ContentBox/ContentBox";
 
 import foodImageOne from "../images/food-image1.jpg";
 import foodImageTwo from "../images/food-image2.jpg";
@@ -16,7 +17,7 @@ function HomePage() {
     <div className="page-wrapper">
       <div className="home-page-wrapper">
         <div className="slider-box">
-          <Slider slides={sliderImages} />
+          <Slider slides={sliderImages} autoPlay={3} />
         </div>
         <div className="home-box px-3">
           <p className="logo-text">SUNDOWN BOULEVARD</p>
@@ -31,6 +32,7 @@ function HomePage() {
         </div>
       </div>
       <EmailInput />
+      <ContentBox />
     </div>
   );
 }

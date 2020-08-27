@@ -7,8 +7,13 @@
 
   h1 {
     font-weight: 800;
-    // font-style: italic;
+    font-size: 19px;
   }
+
+  p {
+    font-size: 12px;
+  }
+
   button {
     pointer-events: all;
     cursor: pointer;
@@ -20,5 +25,21 @@
     top: 25vh;
     text-align: left;
     max-width: calc(1220px / 2);
+
+    h1 {
+      font-size: 25px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (min-width: 1220px) {
+  .home-box {
+    h1 {
+      font-size: 35px;
+    }
   }
 }

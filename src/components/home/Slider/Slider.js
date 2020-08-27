@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SliderContent from "./SliderContent";
 import Dots from "./Dots";
 import "./Slider.scss";
 
-const Slider = ({ slides }) => {
+function Slider({ slides, autoPlay }) {
+  const autoplayRef = useRef();
+
   const getWidth = () => (window.innerWidth > 1220 ? 1220 : window.innerWidth);
 
   const [state, setState] = useState({
@@ -30,24 +32,21 @@ const Slider = ({ slides }) => {
     });
   };
 
-  // const prevSlide = () => {
-  //   if (activeIndex === 0) {
-  //     return setState({
-  //       ...state,
-  //       translate: (slides.length - 1) * getWidth(),
-  //       activeIndex: slides.length - 1,
-  //     });
-  //   }
+  useEffect(() => {
+    autoplayRef.current = nextSlide;
+  });
 
-  //   setState({
-  //     ...state,
-  //     activeIndex: activeIndex - 1,
-  //     translate: (activeIndex - 1) * getWidth(),
-  //   });
-  // };
+  useEffect(() => {
+    const play = () => {
+      autoplayRef.current();
+    };
+
+    const interval = setInterval(play, autoPlay * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="slider-main" onClick={() => nextSlide()}>
+    <div className="slider-main">
       <SliderContent
         translate={translate}
         transition={transition}
@@ -62,6 +61,6 @@ const Slider = ({ slides }) => {
       <Dots slides={slides} activeIndex={activeIndex} />
     </div>
   );
-};
+}
 
 export default Slider;

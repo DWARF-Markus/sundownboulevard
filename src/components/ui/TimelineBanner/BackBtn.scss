@@ -1,0 +1,15 @@
+.back-btn {
+  display: grid;
+  height: 100%;
+  align-items: center;
+
+  a {
+    font-size: 12px;
+    font-weight: 600;
+    span {
+      margin-right: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+}

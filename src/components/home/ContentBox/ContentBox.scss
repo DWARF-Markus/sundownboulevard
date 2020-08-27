@@ -1,0 +1,46 @@
+.content-box-container {
+  position: relative;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  i {
+    font-size: 24px;
+  }
+
+  h4 {
+    font-weight: 800;
+  }
+
+  p {
+    font-size: 12px;
+  }
+
+  .small-text {
+    font-style: italic;
+    font-size: 11px;
+    padding: 5px;
+  }
+}
+
+.content-box-container:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: url("../../../images/food-image4.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  object-fit: cover;
+
+  opacity: 0.15;
+}
+
+@media (min-width: 860px) {
+  .content-box-container {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

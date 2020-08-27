@@ -1,7 +1,7 @@
 import React from "react";
 import "./Dot.scss";
 
-const Dot = ({ active }) => {
+function Dot({ active }) {
   const dotColor = {
     background: `${active ? "#ba2329" : "white"}`,
   };
@@ -11,6 +11,6 @@ const Dot = ({ active }) => {
       {" "}
     </span>
   );
-};
+}
 
 export default Dot;
