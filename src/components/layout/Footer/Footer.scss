@@ -1,6 +1,7 @@
 footer {
   height: auto;
   display: grid;
+  order: 1;
   grid-template-columns: 1fr;
 
   div {
@@ -27,12 +28,14 @@ footer {
 }
 
 .footer-mid {
+  order: -1;
   img {
     max-width: 50px;
   }
   div {
     p {
       font-weight: 100;
+      color: white;
       font-size: 12px;
     }
   }
@@ -40,6 +43,7 @@ footer {
 
 .footer-title {
   font-weight: 100;
+  color: white;
   font-size: 10px;
   cursor: default;
 }
@@ -47,5 +51,8 @@ footer {
 @media (min-width: 630px) {
   footer {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  .footer-mid {
+    order: 0;
   }
 }

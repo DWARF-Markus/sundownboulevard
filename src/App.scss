@@ -31,11 +31,6 @@ a {
   margin: 0 auto;
 }
 
-.block {
-  height: 350px;
-  border: 2px solid gray;
-}
-
 @media (min-width: 630px) {
   .page-wrapper {
     padding-top: 70px;
@@ -50,7 +45,13 @@ body {
 }
 
 p {
-  color: #737b7dd0;
+  color: $black;
+  font-weight: 100;
+}
+
+h1 {
+  color: $black;
+  font-weight: 800;
 }
 
 h3 {
@@ -183,4 +184,8 @@ input:focus {
 
 .px-2 {
   padding: 0 2rem;
+}
+
+.px-3 {
+  padding: 0 3rem;
 }
