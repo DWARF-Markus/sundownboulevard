@@ -1,11 +1,13 @@
 import {
   SET_LOADING,
   SET_EMAIL,
+  SET_STEP,
   GET_DISH,
   GET_DISH_ERR,
 } from "../actions/types";
 
 const initialState = {
+  step: 2,
   email: null,
   dish: null,
   drinks: null,
@@ -24,6 +26,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         email: action.payload,
+      };
+    case SET_STEP:
+      return {
+        ...state,
+        step: state.step + action.payload,
       };
     case GET_DISH:
       return {

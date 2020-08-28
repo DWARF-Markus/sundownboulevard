@@ -1,10 +1,12 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from "react";
+import store from "../../../store";
 import BackBtn from "./BackBtn";
+import { connect } from "react-redux";
 import data from "./timeline-banner.json";
 import "./TimelineBanner.scss";
 
-function TimelineBanner() {
+function TimelineBanner(props) {
   const [backLocation, setBackLocation] = useState("/");
   const [currentStep, setCurrentStep] = useState(2);
 
@@ -13,6 +15,7 @@ function TimelineBanner() {
   const [bannerDesc, setBannerDesc] = useState("");
 
   useEffect(() => {
+    setCurrentStep(store.getState().reducer.step);
     data.map((step) => {
       if (step.step === currentStep) {
         setTimelineTitle(step.timelineTitle);
@@ -20,7 +23,7 @@ function TimelineBanner() {
         setBannerDesc(step.bannerDesc);
       }
     });
-  }, [currentStep]);
+  });
 
   return (
     <div className="timeline-banner-container">
@@ -40,14 +43,16 @@ function TimelineBanner() {
                   className={
                     step.step === currentStep
                       ? "timeline-entry active"
+                      : step.step < currentStep
+                      ? "timeline-entry done"
                       : "timeline-entry"
                   }
                 >
                   <div className="icon">
                     {step.step === currentStep ? (
-                      <i className="fa fa-circle red-text" />
+                      <div className="red-text circle"> </div>
                     ) : step.step > currentStep ? (
-                      <i className="fa fa-circle black-text" />
+                      <div className="black-text circle" />
                     ) : (
                       <i className="fa fa-check white-text checked red" />
                     )}
@@ -62,12 +67,13 @@ function TimelineBanner() {
           <h4 className="mt-1 white-text">{bannerTitle}</h4>
           <p className="mt-1 white-text">{bannerDesc}</p>
         </div>
-        <div className="m-1">
-          <BackBtn color="red-text" title="GO BACK" navigateTo={backLocation} />
-        </div>
       </div>
     </div>
   );
 }
 
-export default TimelineBanner;
+const mapStateToProps = (state) => ({
+  reducer: state.reducer,
+});
+
+export default connect(mapStateToProps)(TimelineBanner);

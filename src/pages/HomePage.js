@@ -14,7 +14,7 @@ function HomePage() {
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
 
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper mx-1">
       <div className="home-page-wrapper">
         <div className="slider-box">
           <Slider slides={sliderImages} autoPlay={3} />
@@ -28,7 +28,7 @@ function HomePage() {
             lorem lorem lorem la la la asd lorem lorem lorem la la la asd lorem
             lorem lorem la la la asd lorem lorem lorem la la la asd
           </p>
-          <PrimaryBtn title="BOOK" navigateTo="/dish" />
+          <PrimaryBtn title="BOOK" navigateTo="/order" />
         </div>
       </div>
       <EmailInput />

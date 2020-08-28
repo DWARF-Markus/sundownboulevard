@@ -1,0 +1,18 @@
+.drinks-container {
+  margin-top: 50px !important;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 630px) {
+  .drinks-container {
+    margin-top: 0px !important;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 790px) {
+  .drinks-container {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

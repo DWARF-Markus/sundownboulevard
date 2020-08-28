@@ -1,4 +1,10 @@
-import { SET_LOADING, SET_EMAIL, GET_DISH, GET_DISH_ERR } from "./types";
+import {
+  SET_LOADING,
+  SET_EMAIL,
+  SET_STEP,
+  GET_DISH,
+  GET_DISH_ERR,
+} from "./types";
 
 export const setLoading = () => {
   return {
@@ -13,6 +19,13 @@ export const setEmail = (email) => {
   };
 };
 
+export const setStep = (e) => {
+  return {
+    type: SET_STEP,
+    payload: e,
+  };
+};
+
 export const getDish = () => async (dispatch) => {
   try {
     setLoading();
@@ -24,7 +37,7 @@ export const getDish = () => async (dispatch) => {
 
     dispatch({
       type: GET_DISH,
-      payload: data,
+      payload: data.meals[0],
     });
   } catch (err) {
     dispatch({

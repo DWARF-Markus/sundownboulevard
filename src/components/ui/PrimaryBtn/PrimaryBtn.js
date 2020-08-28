@@ -1,16 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { setStep } from "../../../actions/actions";
+import store from "../../../store";
 import "./PrimaryBtn.scss";
 
-function PrimaryBtn({ title, icon, navigateTo }) {
+function PrimaryBtn({ increment = false, title, icon, navigateTo, setStep }) {
+  const [navToHome, setNavToHome] = useState(false);
+  const [btnIcon, setBtnIcon] = useState(icon);
+  const [btnTitle, setBtnTitle] = useState(title);
+
+  useEffect(() => {
+    store.subscribe(() => {
+      const currentStep = store.getState().reducer.step;
+      if (currentStep === 5) {
+        setNavToHome(true);
+        setBtnIcon("fa fa-check");
+        setBtnTitle("HOME");
+      } else if (currentStep === 6) {
+        setStep(-4);
+      } else {
+        setNavToHome(false);
+        setBtnIcon(icon);
+        setBtnTitle(title);
+      }
+    });
+  }, [store]);
+
+  const handleStep = () => {
+    if (increment) {
+      setStep(1);
+    }
+  };
+
   return (
-    <Link to={navigateTo}>
-      <button type="submit" className="primary-btn">
-        {title}
-        <i className={icon}> </i>
-      </button>
-    </Link>
+    <>
+      {navToHome ? (
+        <Link to="/">
+          <button
+            type="submit"
+            onClick={() => handleStep()}
+            className="primary-btn"
+          >
+            {btnTitle}
+            <i className={btnIcon}> </i>
+          </button>
+        </Link>
+      ) : (
+        <Link to={navigateTo}>
+          <button
+            type="submit"
+            onClick={() => handleStep()}
+            className="primary-btn"
+          >
+            {btnTitle}
+            <i className={btnIcon}> </i>
+          </button>
+        </Link>
+      )}
+    </>
   );
 }
 
-export default PrimaryBtn;
+export default connect(null, { setStep })(PrimaryBtn);

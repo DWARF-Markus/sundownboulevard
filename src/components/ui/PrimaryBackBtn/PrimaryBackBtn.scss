@@ -1,0 +1,29 @@
+.primary-back-btn {
+  background-color: white;
+  border: none;
+  border-radius: 4px;
+  color: #ba2329;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 800;
+  margin: 5px 0;
+  outline: none;
+  padding: 7px 38px;
+  transition: 0.12s ease;
+
+  i {
+    margin: 0 4px;
+    transition: 0.12s ease;
+  }
+}
+
+.primary-back-btn:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+  transform: scale(1.03);
+}
+
+.primary-back-btn:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}

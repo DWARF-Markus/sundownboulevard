@@ -1,0 +1,39 @@
+.dish-display-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 50px !important;
+
+  h1 {
+    font-weight: 600;
+    font-size: 23px;
+  }
+
+  p {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.dish-display-img img {
+  max-height: 330px;
+  object-fit: cover;
+}
+
+@media (min-width: 630px) {
+  .dish-display-container {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 0px !important;
+  }
+
+  p {
+    -webkit-line-clamp: 20;
+  }
+}

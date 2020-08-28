@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import HomePage from "./pages/HomePage";
-import DishPage from "./pages/DishPage";
+import OrderPage from "./pages/OrderPage";
 import logo from "./images/beach.svg";
 import "./App.scss";
 import "./components/layout/NavBar/NavBar.scss";
@@ -103,8 +103,8 @@ function App() {
             <Route exact path="/">
               <HomePage />
             </Route>
-            <Route exact path="/dish">
-              <DishPage />
+            <Route exact path="/order">
+              <OrderPage />
             </Route>
           </Switch>
 
