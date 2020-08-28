@@ -14,7 +14,7 @@ function HomePage() {
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
 
   return (
-    <div className="page-wrapper mx-1">
+    <div className="page-wrapper">
       <div className="home-page-wrapper">
         <div className="slider-box">
           <Slider slides={sliderImages} autoPlay={3} />
