@@ -11,7 +11,7 @@ function PrimaryBtn({ increment = false, title, icon, navigateTo, setStep }) {
   const [btnTitle, setBtnTitle] = useState(title);
 
   useEffect(() => {
-    store.subscribe(() => {
+    const unsubscribe = store.subscribe(() => {
       const currentStep = store.getState().reducer.step;
       if (currentStep === 5) {
         setNavToHome(true);
@@ -25,6 +25,7 @@ function PrimaryBtn({ increment = false, title, icon, navigateTo, setStep }) {
         setBtnTitle(title);
       }
     });
+    return unsubscribe;
   }, [store]);
 
   const handleStep = () => {
@@ -47,7 +48,7 @@ function PrimaryBtn({ increment = false, title, icon, navigateTo, setStep }) {
           </button>
         </Link>
       ) : (
-        <Link to={navigateTo}>
+        <Link to="/order">
           <button
             type="submit"
             onClick={() => handleStep()}

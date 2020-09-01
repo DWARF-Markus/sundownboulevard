@@ -1,24 +1,93 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import Drink from "./Drink";
+import image from "../../../images/loading-beach.png";
 import "./DrinksDisplay.scss";
+import { setStep } from "../../../actions/actions";
 
-function DrinksDisplay() {
-  const [drinks, setDrinks] = useState([]);
-  const [selectedDrinks, setSelectedDrinks] = useState([]);
+function DrinksDisplay({ reducer, setStep, drinksAmount }) {
+  const [uiDrinks, setUiDrinks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [processingBooking, setProcessingBooking] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const beers = fetch("https://api.punkapi.com/v2/beers")
       .then((res) => res.json())
-      .then((data) => setDrinks(data));
+      .then((data) => {
+        setUiDrinks(data);
+        setLoading(false);
+      });
   }, []);
 
+  const handleBackClick = () => {
+    setStep(3);
+  };
+
+  const handleDrinkSubmit = () => {
+    setProcessingBooking(true);
+    // HANDLE DRINKS SUBMIT HERE
+    setTimeout(() => {
+      setProcessingBooking(false);
+      setStep(5);
+    }, 2200);
+  };
+
+  if (loading || processingBooking) {
+    return (
+      <div className="confirm-display-wrapper mt-2">
+        <div className="confirm-loading-screen mt-2">
+          <div className="confirm-loader mt-2">
+            <img className="loader-animation" src={image} alt="loading icon" />
+            {setProcessingBooking ? (
+              <p className="logo-text">Processing booking ...</p>
+            ) : (
+              <p className="logo-text">Loading drinks ...</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="drinks-container">
-      {drinks.map((drink) => {
-        return <Drink drink={drink} />;
-      })}
-    </div>
+    <>
+      <div className="drinks-container">
+        {uiDrinks.map((UIdrink, i) => {
+          return <Drink selected={reducer.drinks} key={i} drink={UIdrink} />;
+        })}
+      </div>
+      <div className="btn-container px-1">
+        <div className="text-left">
+          <div className="back-container">
+            <button
+              className="primary-back-btn"
+              onClick={() => handleBackClick()}
+            >
+              {" "}
+              <i className="fa fa-caret-left"> </i>
+              BACK
+            </button>
+          </div>
+        </div>
+        <p className="logo-text text-center">{drinksAmount} chosen</p>
+        <div className="text-right">
+          {drinksAmount === 0 ? (
+            <button className="disabled-btn">CHOOSE MIN 1 DRINK</button>
+          ) : (
+            <button className="primary-btn" onClick={() => handleDrinkSubmit()}>
+              NEXT
+              <i className="fa fa-caret-right"> </i>
+            </button>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
 
-export default DrinksDisplay;
+const mapStateToProps = (state) => ({
+  reducer: state.reducer,
+});
+
+export default connect(mapStateToProps, { setStep })(DrinksDisplay);

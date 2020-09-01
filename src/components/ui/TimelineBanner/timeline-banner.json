@@ -7,23 +7,23 @@
   {
     "id": 2,
     "step": 2,
+    "timelineTitle": "DETAILS",
+    "bannerTitle": "DETAILS",
+    "bannerDesc": "Please fill out the booking details by selecting the date you’re visiting along with email and the amount of people arriving with this booking."
+  },
+  {
+    "id": 3,
+    "step": 3,
     "timelineTitle": "DISHES",
     "bannerTitle": "CHOOSE DISH",
     "bannerDesc": "Choose your prefered dish for your stay at Sundown Boulevard. If you don’t feel like eating the chosen dish you can generate a new dish instead."
   },
   {
-    "id": 3,
-    "step": 3,
+    "id": 4,
+    "step": 4,
     "timelineTitle": "DRINKS",
     "bannerTitle": "CHOOSE DRINKS",
     "bannerDesc": "Stay hydrated! Select as many drinks as you want for your meal."
-  },
-  {
-    "id": 4,
-    "step": 4,
-    "timelineTitle": "CONFIRM",
-    "bannerTitle": "CONFIRM",
-    "bannerDesc": "Please confirm by selecting the date you’re visiting along with email and the amount of people arriving with this booking."
   },
   {
     "id": 5,

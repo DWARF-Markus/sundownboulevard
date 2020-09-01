@@ -1,0 +1,61 @@
+.receipt-container {
+  padding: 50px 10px 0px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fadein {
+  0% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.receipt {
+  margin: 20px 0;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  max-width: 570px;
+  background-color: white;
+  width: 100%;
+  padding: 25px;
+  border-radius: 5px;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  animation-name: fadein;
+  animation-duration: 2s;
+
+  h3 {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 5px;
+    font-size: 11px;
+    font-weight: 100;
+    text-align: left;
+    font-style: italic;
+    color: #ba2329;
+    span {
+      padding-left: 0px;
+      font-weight: 200;
+      font-size: 17px;
+      color: #343434;
+    }
+  }
+}
+
+.divider {
+  width: 100%;
+  border-bottom: 1px solid rgba(184, 180, 180, 0.226);
+  margin: 20px 0;
+}

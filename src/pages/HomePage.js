@@ -1,17 +1,27 @@
 import React from "react";
 import "./HomePage.scss";
+import { useHistory } from "react-router-dom";
 
 import PrimaryBtn from "../components/ui/PrimaryBtn/PrimaryBtn";
 import Slider from "../components/home/Slider/Slider";
 import EmailInput from "../components/home/EmailInput/EmailInput";
 import ContentBox from "../components/home/ContentBox/ContentBox";
 
+import { connect } from "react-redux";
+import { setStep } from "../actions/actions";
+
 import foodImageOne from "../images/food-image1.jpg";
 import foodImageTwo from "../images/food-image2.jpg";
 import foodImageThree from "../images/food-image3.jpg";
 
-function HomePage() {
+function HomePage({ setStep }) {
+  let history = useHistory();
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
+
+  const handleNewBookClick = () => {
+    setStep(2);
+    history.push("/order");
+  };
 
   return (
     <div className="page-wrapper">
@@ -28,7 +38,9 @@ function HomePage() {
             lorem lorem lorem la la la asd lorem lorem lorem la la la asd lorem
             lorem lorem la la la asd lorem lorem lorem la la la asd
           </p>
-          <PrimaryBtn title="BOOK" navigateTo="/order" />
+          <button className="primary-btn" onClick={() => handleNewBookClick()}>
+            BOOK
+          </button>
         </div>
       </div>
       <EmailInput />
@@ -37,4 +49,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default connect(null, { setStep })(HomePage);

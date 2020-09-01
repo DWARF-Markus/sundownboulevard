@@ -28,7 +28,7 @@ function TimelineBanner(props) {
   return (
     <div className="timeline-banner-container">
       <div className="mobile-timeline-banner red px-1">
-        <BackBtn color="white-text" title="GO BACK" navigateTo={backLocation} />
+        <BackBtn color="white-text" title="HOME" navigateTo={backLocation} />
         <h4 className="current-step-text white-text">{bannerTitle}</h4>
         <h4 className="current-step-number white-text">
           <span>{currentStep}</span> / <span>5</span>
@@ -36,10 +36,11 @@ function TimelineBanner(props) {
       </div>
       <div className="desktop-wrapper">
         <div className="timeline-container">
-          <div className="timeline-wrapper mt-1 px-2">
-            {data.map((step) => {
+          <div className="timeline-wrapper">
+            {data.map((step, i) => {
               return (
                 <div
+                  key={i}
                   className={
                     step.step === currentStep
                       ? "timeline-entry active"
@@ -63,7 +64,7 @@ function TimelineBanner(props) {
             })}
           </div>
         </div>
-        <div className="banner-wrapper red p-1">
+        <div className="banner-wrapper red">
           <h4 className="mt-1 white-text">{bannerTitle}</h4>
           <p className="mt-1 white-text">{bannerDesc}</p>
         </div>

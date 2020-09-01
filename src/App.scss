@@ -202,3 +202,18 @@ input:focus {
 .text-right {
   text-align: right;
 }
+
+.disabled-btn {
+  background-color: $dark-gray;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 10px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.text-center {
+  text-align: center;
+}

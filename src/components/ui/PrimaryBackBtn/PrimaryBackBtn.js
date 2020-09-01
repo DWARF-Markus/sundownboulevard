@@ -9,7 +9,7 @@ function PrimaryBackBtn({ decrease, title, icon, setStep }) {
   const [navToHome, setNavToHome] = useState(false);
 
   useEffect(() => {
-    store.subscribe(() => {
+    const unsubscribe = store.subscribe(() => {
       const currentStep = store.getState().reducer.step;
       if (currentStep === 2) {
         setNavToHome(true);
@@ -17,6 +17,7 @@ function PrimaryBackBtn({ decrease, title, icon, setStep }) {
         setNavToHome(false);
       }
     });
+    return unsubscribe;
   }, [store]);
 
   const handleClick = () => {

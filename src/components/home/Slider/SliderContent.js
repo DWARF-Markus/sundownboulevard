@@ -13,8 +13,8 @@ function SliderContent({ slides, width, translate, transition, opacity }) {
 
   return (
     <div style={SliderContentStyles}>
-      {slides.map((slide) => (
-        <div style={{ width }}>
+      {slides.map((slide, i) => (
+        <div key={i} style={{ width }}>
           <Slide content={slide} />
         </div>
       ))}

@@ -6,14 +6,14 @@ import "./BackBtn.scss";
 
 function BackBtn({ color, title, navigateTo, setStep }) {
   const handleStep = () => {
-    setStep(-1);
+    setStep(2);
   };
 
   return (
     <div className="back-btn" onClick={() => handleStep()}>
       <Link to={navigateTo} className={color}>
         <span>
-          <i className="fa fa-caret-left"> </i>
+          <i className="fa fa-home"> </i>
         </span>
         {title}
       </Link>
