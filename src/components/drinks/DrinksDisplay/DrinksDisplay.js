@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Drink from "./Drink";
-import image from "../../../images/loading-beach.png";
+import token from "../../../token";
+import image from "../../../images/blue-beach.png";
 import "./DrinksDisplay.scss";
 import { setStep } from "../../../actions/actions";
 
-function DrinksDisplay({ reducer, setStep, drinksAmount }) {
+function DrinksDisplay({
+  reducer,
+  setStep,
+  drinksAmount,
+  id,
+  drinks,
+  bookingPeople,
+}) {
   const [uiDrinks, setUiDrinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [processingBooking, setProcessingBooking] = useState(false);
@@ -21,16 +29,35 @@ function DrinksDisplay({ reducer, setStep, drinksAmount }) {
   }, []);
 
   const handleBackClick = () => {
-    setStep(3);
+    setStep(2);
   };
 
-  const handleDrinkSubmit = () => {
+  const handleDrinkSubmit = async () => {
     setProcessingBooking(true);
-    // HANDLE DRINKS SUBMIT HERE
+
     setTimeout(() => {
       setProcessingBooking(false);
-      setStep(5);
-    }, 2200);
+      setStep(4);
+    }, 800);
+
+    // const drinksToPost = drinks
+    //   .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
+    //   .join("&");
+
+    // await fetch(
+    //   `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/drinks?${drinksToPost}`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: token,
+    //     },
+    //   },
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //   });
   };
 
   if (loading || processingBooking) {
@@ -40,9 +67,9 @@ function DrinksDisplay({ reducer, setStep, drinksAmount }) {
           <div className="confirm-loader mt-2">
             <img className="loader-animation" src={image} alt="loading icon" />
             {setProcessingBooking ? (
-              <p className="logo-text">Processing booking ...</p>
+              <p className="logo-text blue-text">Processing booking ...</p>
             ) : (
-              <p className="logo-text">Loading drinks ...</p>
+              <p className="logo-text blue-text">Loading drinks ...</p>
             )}
           </div>
         </div>
@@ -54,14 +81,22 @@ function DrinksDisplay({ reducer, setStep, drinksAmount }) {
     <>
       <div className="drinks-container">
         {uiDrinks.map((UIdrink, i) => {
-          return <Drink selected={reducer.drinks} key={i} drink={UIdrink} />;
+          return (
+            <Drink
+              drinksAmount={drinksAmount}
+              bookingPeople={bookingPeople}
+              selected={reducer.drinks}
+              key={i}
+              drink={UIdrink}
+            />
+          );
         })}
       </div>
       <div className="btn-container px-1">
         <div className="text-left">
           <div className="back-container">
             <button
-              className="primary-back-btn"
+              className="primary-back-btn blue-text"
               onClick={() => handleBackClick()}
             >
               {" "}
@@ -70,7 +105,7 @@ function DrinksDisplay({ reducer, setStep, drinksAmount }) {
             </button>
           </div>
         </div>
-        <p className="logo-text text-center">{drinksAmount} chosen</p>
+        <p className="logo-text text-center blue-text">{drinksAmount} chosen</p>
         <div className="text-right">
           {drinksAmount === 0 ? (
             <button className="disabled-btn">CHOOSE MIN 1 DRINK</button>

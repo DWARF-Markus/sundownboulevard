@@ -1,15 +1,83 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import PrimaryBtn from "../../ui/PrimaryBtn/PrimaryBtn";
+import * as EmailValidator from "email-validator";
+import token from "../../../token";
+import { useHistory } from "react-router-dom";
 import "./EmailInput.scss";
-import { setEmail } from "../../../actions/actions";
+import {
+  setEmail,
+  setBookingType,
+  setBookingId,
+  setDate,
+  setStep,
+  setPeopleAmount,
+  clearDrinks,
+  setDrinkOnUpdate,
+  setDishOnUpdate,
+  getDish,
+} from "../../../actions/actions";
 
-function EmailInput({ setEmail }) {
+function EmailInput({
+  setEmail,
+  setBookingType,
+  setBookingId,
+  setDate,
+  setStep,
+  setPeopleAmount,
+  setDrinkOnUpdate,
+  setDishOnUpdate,
+  clearDrinks,
+  getDish,
+}) {
+  let history = useHistory();
   const [userEmail, setUserEmail] = useState("");
+  const [errMessage, setErrMessage] = useState("");
 
-  const submitEmail = (e) => {
-    setEmail(userEmail);
+  const handleUpdateBookingClick = async () => {
+    const isEmailValid = EmailValidator.validate(userEmail);
+
+    if (isEmailValid) {
+      clearDrinks();
+      await fetch(
+        `
+      https://krh-sundown.dev.dwarf.dk/api/bookings?filter[email]=${userEmail}&include=drinks,dishes&sort=startTime`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.length === 0) {
+            setErrMessage("No booking was found with this email");
+          } else {
+            if (data[0].dishes.length === 0) {
+              getDish();
+              console.log("no dishes has been added yet");
+            } else {
+              setDishOnUpdate(data[0].dishes[0]["externalDishId"]);
+            }
+
+            const drinks = data[0].drinks.map((drink) =>
+              setDrinkOnUpdate(parseInt(drink["externalDrinkId"])),
+            );
+
+            setEmail(userEmail);
+            setBookingType("updateBooking");
+            setBookingId(data[0].id);
+            setDate(data[0].startTime);
+            setPeopleAmount(data[0].numberOfPeople);
+            setStep(2);
+            history.push("/order");
+          }
+        });
+    } else {
+      setErrMessage("Please enter a valid email");
+    }
   };
 
   return (
@@ -23,6 +91,9 @@ function EmailInput({ setEmail }) {
       </div>
       <div className="email-input-wrapper mt-1">
         <div className="input-pair">
+          <label htmlFor="email-input" className="red-text">
+            {errMessage ? errMessage : " "}
+          </label>
           <label htmlFor="email-input">Email</label>
           <input
             type="email"
@@ -30,8 +101,13 @@ function EmailInput({ setEmail }) {
             name="email-input"
             onChange={(e) => setUserEmail(e.target.value)}
           />
-          <div onClick={submitEmail}>
-            <PrimaryBtn title="GO" navigateTo="/" />
+          <div>
+            <button
+              onClick={() => handleUpdateBookingClick()}
+              className="primary-home-btn"
+            >
+              GO
+            </button>
           </div>
         </div>
       </div>
@@ -43,4 +119,15 @@ function EmailInput({ setEmail }) {
 //   reducer: state.reducer,
 // });
 
-export default connect(null, { setEmail })(EmailInput);
+export default connect(null, {
+  setEmail,
+  setBookingType,
+  setBookingId,
+  setDate,
+  setStep,
+  setPeopleAmount,
+  setDrinkOnUpdate,
+  setDishOnUpdate,
+  clearDrinks,
+  getDish,
+})(EmailInput);

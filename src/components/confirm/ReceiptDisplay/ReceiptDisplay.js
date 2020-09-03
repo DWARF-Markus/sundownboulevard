@@ -54,7 +54,7 @@ function ReceiptDisplay({ data, setStep }) {
   return (
     <div className="receipt-container">
       <div className="receipt text-center">
-        <h3 className="mt-1 text-left logo-text">RECEIPT</h3>
+        <h3 className="mt-1 text-left logo-text blue-text">RECEIPT</h3>
         <div className="order-items">
           <p>
             {guests}x <span>{dish}</span>
@@ -70,16 +70,16 @@ function ReceiptDisplay({ data, setStep }) {
         <div className="divider"> </div>
         <div className="order-details">
           <p>
-            email <span>{email}</span>
+            Email <span>{email}</span>
           </p>
           <p>
-            date and time{" "}
+            Date and time{" "}
             <span>
               <Moment format="DD/MM/YYYY HH:mm">{date}</Moment>
             </span>
           </p>
           <p>
-            guests <span>{guests}</span>
+            Guests <span>{guests}</span>
           </p>
         </div>
       </div>

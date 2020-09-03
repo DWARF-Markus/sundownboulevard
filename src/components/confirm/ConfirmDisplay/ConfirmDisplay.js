@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "react-datetime-picker";
-import image from "../../../images/loading-beach.png";
+import InputRange from "react-input-range";
+import token from "../../../token";
+import image from "../../../images/blue-beach.png";
 import * as EmailValidator from "email-validator";
 import { connect } from "react-redux";
 import {
@@ -8,6 +10,8 @@ import {
   setEmail,
   setDate,
   setPeopleAmount,
+  setBookingId,
+  clearDish,
 } from "../../../actions/actions";
 import "./ConfirmDisplay.scss";
 
@@ -16,7 +20,13 @@ function ConfirmDisplay({
   setEmail,
   setDate,
   setPeopleAmount,
+  setBookingId,
+  clearDish,
+  drinks,
+  dish,
   reducer,
+  currentBookingType,
+  id,
 }) {
   const [emailInput, setEmailInput] = useState("");
   const [dateInput, setDateInput] = useState("");
@@ -25,42 +35,147 @@ function ConfirmDisplay({
   const [dateValid, setDateValid] = useState(true);
   const [peopleAmountValid, setPeopleAmountValid] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [localBookId, setLocalBookId] = useState("");
 
   useEffect(() => {
-    if (reducer.bookingEmail) {
+    if (currentBookingType === "updateBooking") {
       setEmailInput(reducer.bookingEmail);
       setEmailValid(true);
-    }
-    if (reducer.bookingDate) {
-      setDateInput(reducer.bookingDate);
+      setDateInput(new Date(reducer.bookingDate));
       setDateValid(true);
+      setPeopleAmountInput(reducer.bookingPeople);
     } else {
       const date = new Date();
-      date.setHours(17);
+      date.setHours(18);
       setDateInput(date);
-    }
-    if (reducer.bookingPeople) {
-      setPeopleAmountInput(reducer.bookingPeople);
+      setPeopleAmountInput(2);
     }
   }, []);
 
-  const handleBooking = () => {
-    console.log(
-      reducer.bookingDate,
-      reducer.bookingEmail,
-      reducer.bookingPeople,
-    );
+  const handleBooking = async () => {
     setLoading(true);
+    console.log(drinks);
+    console.log(dish);
+    const d = new Date(reducer.bookingDate);
 
-    // HANDLE API SUBMIT HERE
-    setTimeout(() => {
-      setStep(3);
-    }, [1200]);
+    const dateToSend =
+      [d.getDate() + "-" + [d.getMonth() + 1] + "-" + d.getFullYear()].join(
+        "/",
+      ) +
+      " " +
+      d.getHours() +
+      ":" +
+      d.getMinutes() +
+      0;
+
+    const postDetails = async (bookId) => {
+      console.log("id", id);
+      console.log("localbookid", localBookId);
+      await fetch(
+        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/dishes?dishes[0][dishId]=${dish.idMeal}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        },
+      );
+
+      const drinksToPost = drinks
+        .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
+        .join("&");
+
+      await fetch(
+        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/drinks?${drinksToPost}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setStep(5);
+        });
+    };
+
+    // CREATING A NEW BOOKING
+    if (currentBookingType === "newBooking") {
+      await fetch("https://krh-sundown.dev.dwarf.dk/api/user/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+          "Access-Control-Allow-Origin": "*",
+          mode: "no-cors",
+        },
+        body: JSON.stringify({
+          startTime: dateToSend,
+          numberOfPeople: reducer.bookingPeople,
+          email: reducer.bookingEmail,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          postDetails(data.bookingId);
+        });
+
+      // UPDATING A NEW BOOKING
+    } else {
+      console.log("update1");
+      await fetch(`https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+          "Access-Control-Allow-Origin": "*",
+          mode: "no-cors",
+        },
+        body: JSON.stringify({
+          startTime: dateToSend,
+          numberOfPeople: peopleAmountInput,
+        }),
+      });
+      console.log("update2");
+      await fetch(
+        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/dishes?dishes[0][dishId]=${dish.idMeal}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        },
+      );
+
+      const drinksToPost = drinks
+        .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
+        .join("&");
+
+      await fetch(
+        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/drinks?${drinksToPost}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setStep(5);
+          console.log("update3");
+        });
+    }
   };
 
   const validateDate = (input) => {
     const hours = input.getHours();
-    if (hours < 16 || hours > 23) {
+    if (hours < 18 || hours > 23) {
       setDateValid(false);
     } else {
       setDateInput(input);
@@ -70,10 +185,10 @@ function ConfirmDisplay({
   };
 
   const validatePeopleAmount = (amount) => {
-    if (amount > 0 && amount <= 10) {
-      setPeopleAmount(amount);
+    if (amount.value > 0 && amount.value <= 10) {
+      setPeopleAmount(amount.value);
       setPeopleAmountValid(true);
-      setPeopleAmountInput(amount);
+      setPeopleAmountInput(amount.value);
     } else {
       setPeopleAmountValid(false);
     }
@@ -97,7 +212,7 @@ function ConfirmDisplay({
         <div className="confirm-loading-screen mt-2">
           <div className="confirm-loader mt-2">
             <img className="loader-animation" src={image} alt="loading icon" />
-            <p className="logo-text">Initializing new booking ...</p>
+            <p className="logo-text blue-text">Initializing new booking ...</p>
           </div>
         </div>
       </div>
@@ -106,11 +221,17 @@ function ConfirmDisplay({
 
   return (
     <div className="confirm-display-wrapper">
-      <div className="confirm-display-container p-1">
-        <div className="input-pair">
+      <div className="confirm-display-container opacity-animation p-1">
+        <div
+          className={
+            currentBookingType === "updateBooking"
+              ? "input-pair disabled"
+              : "input-pair"
+          }
+        >
           <label htmlFor="confirmEmail">Email</label>
           {emailValid === false ? (
-            <label className="red-text">please enter a valid email</label>
+            <label className="blue-text">please enter a valid email</label>
           ) : (
             <></>
           )}
@@ -150,7 +271,7 @@ function ConfirmDisplay({
           {dateValid ? (
             <></>
           ) : (
-            <label className="red-text">
+            <label className="blue-text">
               Please choose a time where we're open
             </label>
           )}
@@ -160,6 +281,7 @@ function ConfirmDisplay({
           minDate={new Date()}
           onChange={(e) => validateDate(e)}
           format="dd-MM-y HH:mm"
+          locale="da-dk"
           maxDetail="minute"
           required
         />
@@ -168,18 +290,42 @@ function ConfirmDisplay({
           {peopleAmountValid ? (
             <></>
           ) : (
-            <label className="red-text">Only between 1-10 people allowed</label>
+            <label className="blue-text">
+              Only between 1-10 people allowed
+            </label>
           )}
-          <input
-            onChange={(e) => validatePeopleAmount(e.target.value)}
-            id="peopleAmount"
-            type="number"
-            value={peopleAmountInput}
-            min="1"
-            max="10"
-          />
+          <div className="mt-1">
+            <InputRange
+              maxValue={10}
+              minValue={1}
+              value={parseInt(peopleAmountInput)}
+              onChange={(value) => validatePeopleAmount({ value })}
+            />
+          </div>
         </div>
-        {emailValid && dateValid && peopleAmountValid ? (
+        {currentBookingType === "updateBooking" &&
+        emailValid &&
+        dateValid &&
+        peopleAmountValid ? (
+          <button className="confirm-btn" onClick={() => handleBooking()}>
+            UPDATE{" "}
+            <span>
+              <i className="fa fa-check"></i>
+            </span>
+          </button>
+        ) : (currentBookingType === "updateBooking" && !emailValid) ||
+          !dateValid ||
+          !peopleAmountValid ? (
+          <button className="confirm-btn disabled">
+            UPDATE{" "}
+            <span>
+              <i className="fa fa-check"></i>
+            </span>
+          </button>
+        ) : currentBookingType === "newBooking" &&
+          emailValid &&
+          dateValid &&
+          peopleAmountValid ? (
           <button className="confirm-btn" onClick={() => handleBooking()}>
             CONFIRM{" "}
             <span>
@@ -208,4 +354,6 @@ export default connect(mapStateToProps, {
   setEmail,
   setDate,
   setPeopleAmount,
+  setBookingId,
+  clearDish,
 })(ConfirmDisplay);

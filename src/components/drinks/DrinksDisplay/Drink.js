@@ -3,7 +3,14 @@ import { connect } from "react-redux";
 import { setDrink, removeDrink } from "../../../actions/actions";
 import "./Drink.scss";
 
-function Drink({ drink, setDrink, removeDrink, selected }) {
+function Drink({
+  drink,
+  setDrink,
+  removeDrink,
+  selected,
+  drinksAmount,
+  bookingPeople,
+}) {
   const [isSelected, setIsSelected] = useState(false);
   const [amount, setAmount] = useState(0);
 
@@ -21,6 +28,10 @@ function Drink({ drink, setDrink, removeDrink, selected }) {
   }, []);
 
   const handleDrinkSelect = (id, name) => {
+    console.log(id, name);
+    // if (drinksAmount === parseInt(bookingPeople)) {
+    //   console.log("no more beers for this booking!");
+    // } else {
     setDrink(id, name);
     if (isSelected) {
       setAmount(parseInt(amount) + 1);
@@ -28,6 +39,7 @@ function Drink({ drink, setDrink, removeDrink, selected }) {
       setIsSelected(true);
       setAmount(1);
     }
+    // }
   };
 
   const handleDrinksRemove = (id) => {

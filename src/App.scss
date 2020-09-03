@@ -41,7 +41,7 @@ a {
 
 html,
 body {
-  font-family: "Helvetica", sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
 }
 
 p {
@@ -87,6 +87,18 @@ h4 {
   transition: 0.14s ease;
 }
 
+.input-pair.disabled label {
+  color: $black;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.input-pair.disabled input {
+  border: 1px solid $dark-gray;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 input:focus {
   outline: none;
 }
@@ -130,7 +142,7 @@ input:focus {
 }
 
 .blue-text {
-  color: $blue;
+  color: $blue !important;
 }
 
 .dark-gray-text {
@@ -216,4 +228,13 @@ input:focus {
 
 .text-center {
   text-align: center;
+}
+
+.switch-wrapper {
+  position: relative;
+}
+
+.switch-wrapper > div {
+  position: absolute;
+  width: 100%;
 }

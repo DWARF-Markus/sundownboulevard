@@ -4,8 +4,15 @@ import {
   SET_PEOPLE_AMOUNT,
   SET_DATE,
   SET_STEP,
+  SET_BOOKING_ID,
   REMOVE_DRINK,
   SET_DRINK,
+  SET_DRINK_UPDATE,
+  SET_DISH_UPDATE,
+  SET_DISH_BY_ID,
+  CLEAR_DRINKS,
+  SET_BOOKING_TYPE,
+  CLEAR_DISH,
   GET_DISH,
   GET_DISH_ERR,
 } from "./types";
@@ -51,6 +58,25 @@ export const setDrink = (drink) => {
   };
 };
 
+export const setDrinkOnUpdate = (id) => {
+  return {
+    type: SET_DRINK_UPDATE,
+    payload: id,
+  };
+};
+
+export const clearDrinks = () => {
+  return {
+    type: CLEAR_DRINKS,
+  };
+};
+
+export const clearDish = () => {
+  return {
+    type: CLEAR_DISH,
+  };
+};
+
 export const removeDrink = (drink) => {
   return {
     type: REMOVE_DRINK,
@@ -58,10 +84,23 @@ export const removeDrink = (drink) => {
   };
 };
 
-export const getDish = () => async (dispatch) => {
-  try {
-    setLoading();
+export const setBookingId = (id) => {
+  return {
+    type: SET_BOOKING_ID,
+    payload: id,
+  };
+};
 
+export const setBookingType = (type) => {
+  return {
+    type: SET_BOOKING_TYPE,
+    payload: type,
+  };
+};
+
+export const getDish = () => async (dispatch) => {
+  console.log("go");
+  try {
     const res = await fetch(
       "https://www.themealdb.com/api/json/v1/1/random.php",
     );
@@ -74,7 +113,26 @@ export const getDish = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: GET_DISH_ERR,
-      payload: err.response.data,
+      payload: err,
+    });
+  }
+};
+
+export const setDishOnUpdate = (id) => async (dispatch) => {
+  const res = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+  );
+  const data = await res.json();
+
+  if (data.meals === null) {
+    dispatch({
+      type: GET_DISH,
+      payload: null,
+    });
+  } else {
+    dispatch({
+      type: GET_DISH,
+      payload: data.meals[0],
     });
   }
 };

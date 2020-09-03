@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { AnimatedSwitch } from "react-router-transition";
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -29,11 +30,12 @@ function App() {
             <div className="navbar-wrapper">
               <div className="navbar-logo">
                 <img src={logo} alt="Sundown Boulevard logo" />
+                <p className="logo-text">SUNDOWN BOULEVARD</p>
               </div>
               <div onClick={() => toggleNav()} className="navbar-mobile-menu">
                 <div
                   className={
-                    open ? "nav-mobile-bars active" : "nav-mobile-bars"
+                    open ? "nav-mobile-bars nav-active" : "nav-mobile-bars"
                   }
                 >
                   <div className="bar1" />
@@ -43,7 +45,7 @@ function App() {
               </div>
               <div className="nav-links">
                 <ul>
-                  <li className="nav-entry active pt-1">
+                  <li className="nav-entry nav-active pt-1">
                     <Link to="/" className="black-text mx-1 red-text" href="#!">
                       BOOK
                     </Link>
@@ -69,13 +71,13 @@ function App() {
             <div
               className={
                 open
-                  ? "nav-mobile-links active white px-1"
+                  ? "nav-mobile-links nav-active white px-1"
                   : "nav-mobile-links white px-1"
               }
             >
               <h1 className="logo-text mt-1">SUNDOWN BOULEVARD</h1>
               <ul>
-                <li className="nav-mobile-entry active pt-1">
+                <li className="nav-mobile-entry nav-active pt-1">
                   <a className="black-text" href="#!">
                     BOOK
                   </a>
@@ -99,16 +101,21 @@ function App() {
             </div>
           </nav>
 
-          <Switch>
+          <AnimatedSwitch
+            atEnter={{ opacity: 0 }}
+            atLeave={{ opacity: 1 }}
+            atActive={{ opacity: 1 }}
+            className="switch-wrapper"
+          >
             <Route exact path="/">
               <HomePage />
+              <Footer />
             </Route>
             <Route exact path="/order">
               <OrderPage />
+              <Footer />
             </Route>
-          </Switch>
-
-          <Footer />
+          </AnimatedSwitch>
         </div>
       </Router>
     </Provider>

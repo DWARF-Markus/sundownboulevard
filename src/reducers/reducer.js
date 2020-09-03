@@ -5,6 +5,13 @@ import {
   SET_DATE,
   SET_STEP,
   SET_DRINK,
+  SET_DRINK_UPDATE,
+  CLEAR_DRINKS,
+  CLEAR_DISH,
+  SET_DISH_UPDATE,
+  SET_DISH_BY_ID,
+  SET_BOOKING_ID,
+  SET_BOOKING_TYPE,
   REMOVE_DRINK,
   GET_DISH,
   GET_DISH_ERR,
@@ -17,6 +24,8 @@ const initialState = {
   bookingDate: intitalBookingDate,
   bookingEmail: null,
   bookingPeople: "2",
+  bookingId: null,
+  bookingType: null,
   dish: null,
   drinks: [],
   drinksName: [],
@@ -51,6 +60,16 @@ export default (state = initialState, action) => {
           { id: action.payload.id, name: action.payload.name },
         ],
       };
+    case SET_DRINK_UPDATE:
+      return {
+        ...state,
+        drinks: [...state.drinks, action.payload],
+      };
+    case SET_DISH_UPDATE:
+      return {
+        ...state,
+        dish: action.payload,
+      };
     case REMOVE_DRINK:
       return {
         ...state,
@@ -70,6 +89,31 @@ export default (state = initialState, action) => {
       return {
         ...state,
         bookingPeople: action.payload,
+      };
+    case SET_BOOKING_ID:
+      return {
+        ...state,
+        bookingId: action.payload,
+      };
+    case SET_BOOKING_TYPE:
+      return {
+        ...state,
+        bookingType: action.payload,
+      };
+    case SET_DISH_BY_ID:
+      return {
+        ...state,
+        dish: action.payload,
+      };
+    case CLEAR_DRINKS:
+      return {
+        ...state,
+        drinks: [],
+      };
+    case CLEAR_DISH:
+      return {
+        ...state,
+        dish: null,
       };
     case GET_DISH:
       return {

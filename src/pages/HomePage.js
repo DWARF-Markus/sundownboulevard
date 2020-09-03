@@ -8,17 +8,18 @@ import EmailInput from "../components/home/EmailInput/EmailInput";
 import ContentBox from "../components/home/ContentBox/ContentBox";
 
 import { connect } from "react-redux";
-import { setStep } from "../actions/actions";
+import { setStep, setBookingType } from "../actions/actions";
 
 import foodImageOne from "../images/food-image1.jpg";
 import foodImageTwo from "../images/food-image2.jpg";
 import foodImageThree from "../images/food-image3.jpg";
 
-function HomePage({ setStep }) {
+function HomePage({ setStep, setBookingType }) {
   let history = useHistory();
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
 
   const handleNewBookClick = () => {
+    setBookingType("newBooking");
     setStep(2);
     history.push("/order");
   };
@@ -38,7 +39,10 @@ function HomePage({ setStep }) {
             lorem lorem lorem la la la asd lorem lorem lorem la la la asd lorem
             lorem lorem la la la asd lorem lorem lorem la la la asd
           </p>
-          <button className="primary-btn" onClick={() => handleNewBookClick()}>
+          <button
+            className="primary-home-btn primary-cat"
+            onClick={() => handleNewBookClick()}
+          >
             BOOK
           </button>
         </div>
@@ -49,4 +53,4 @@ function HomePage({ setStep }) {
   );
 }
 
-export default connect(null, { setStep })(HomePage);
+export default connect(null, { setStep, setBookingType })(HomePage);
