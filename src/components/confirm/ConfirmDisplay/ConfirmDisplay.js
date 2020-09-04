@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "react-datetime-picker";
 import InputRange from "react-input-range";
-import token from "../../../token";
 import image from "../../../images/blue-beach.png";
 import * as EmailValidator from "email-validator";
 import { connect } from "react-redux";
@@ -60,8 +59,7 @@ function ConfirmDisplay({
   const handleBooking = async () => {
     window.scrollTo(0, 0);
     setLoading(true);
-    console.log(drinks);
-    console.log(dish);
+
     const d = new Date(reducer.bookingDate);
 
     const dateToSend =
@@ -75,15 +73,13 @@ function ConfirmDisplay({
       0;
 
     const postDetails = async (bookId) => {
-      console.log("id", id);
-      console.log("localbookid", localBookId);
       await fetch(
         `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/dishes?dishes[0][dishId]=${dish.idMeal}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: token,
+            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           },
         },
       );
@@ -98,7 +94,7 @@ function ConfirmDisplay({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: token,
+            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           },
         },
       )
@@ -114,9 +110,7 @@ function ConfirmDisplay({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token,
-          "Access-Control-Allow-Origin": "*",
-          mode: "no-cors",
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
         },
         body: JSON.stringify({
           startTime: dateToSend,
@@ -131,12 +125,11 @@ function ConfirmDisplay({
 
       // UPDATING A NEW BOOKING
     } else {
-      console.log("update1");
       await fetch(`https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token,
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           "Access-Control-Allow-Origin": "*",
           mode: "no-cors",
         },
@@ -153,7 +146,7 @@ function ConfirmDisplay({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: token,
+            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           },
         },
       );
@@ -168,14 +161,13 @@ function ConfirmDisplay({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: token,
+            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           },
         },
       )
         .then((res) => res.json())
         .then((data) => {
           setStep(5);
-          console.log("update3");
         });
     }
   };

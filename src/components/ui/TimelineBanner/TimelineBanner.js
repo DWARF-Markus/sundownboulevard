@@ -19,7 +19,6 @@ function TimelineBanner({ step }) {
   const [bannerDesc, setBannerDesc] = useState("");
 
   useEffect(() => {
-    console.log("mount");
     setLoading(true);
     setCurrentStep(store.getState().reducer.step);
     setBookingType(store.getState().reducer.bookingType);
@@ -31,7 +30,6 @@ function TimelineBanner({ step }) {
           setTimelineTitle(info.timelineTitle);
           setBannerTitle(info.bannerTitle);
           setBannerDesc(info.bannerDesc);
-          console.log("unmount");
         }, 500);
       }
     });

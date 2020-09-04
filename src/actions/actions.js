@@ -99,7 +99,6 @@ export const setBookingType = (type) => {
 };
 
 export const getDish = () => async (dispatch) => {
-  console.log("go");
   try {
     const res = await fetch(
       "https://www.themealdb.com/api/json/v1/1/random.php",

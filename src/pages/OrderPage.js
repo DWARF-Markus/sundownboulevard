@@ -8,7 +8,6 @@ import {
   clearDish,
   clearDrinks,
 } from "../actions/actions";
-import token from "../token";
 import image from "../images/blue-beach.png";
 import store from "../store";
 import TimelineBanner from "../components/ui/TimelineBanner/TimelineBanner";
@@ -20,14 +19,7 @@ import PrimaryBtn from "../components/ui/PrimaryBtn/PrimaryBtn";
 import PrimaryBackBtn from "../components/ui/PrimaryBackBtn/PrimaryBackBtn";
 import "./OrderPage.scss";
 
-function OrderPage({
-  getDish,
-  setStep,
-  setDishOnUpdate,
-  reducer,
-  clearDrinks,
-  clearDish,
-}) {
+function OrderPage({ getDish, setStep, reducer, clearDrinks, clearDish }) {
   const [currentDish, setCurrentDish] = useState("");
   const [currentStep, setCurrentStep] = useState("");
   const [drinks, setDrinks] = useState("");
@@ -36,9 +28,8 @@ function OrderPage({
   const [bookingId, setBookingId] = useState("");
   const [currentBookingType, setCurrentBookingType] = useState("");
   const [loading, setLoading] = useState(true);
-  const [dishId, setDishId] = useState("");
 
-  let history = useHistory();
+  const history = useHistory();
 
   const handleCancelClick = async () => {
     await fetch(
@@ -48,7 +39,7 @@ function OrderPage({
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token,
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
         },
       },
     );

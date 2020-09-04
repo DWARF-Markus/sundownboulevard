@@ -28,10 +28,6 @@ function Drink({
   }, []);
 
   const handleDrinkSelect = (id, name) => {
-    console.log(id, name);
-    // if (drinksAmount === parseInt(bookingPeople)) {
-    //   console.log("no more beers for this booking!");
-    // } else {
     setDrink(id, name);
     if (isSelected) {
       setAmount(parseInt(amount) + 1);

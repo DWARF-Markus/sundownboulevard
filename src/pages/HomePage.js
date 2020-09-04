@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./HomePage.scss";
 import { useHistory } from "react-router-dom";
 
