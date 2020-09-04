@@ -19,6 +19,23 @@
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
+  opacity: 1;
+  transition: 0.3s ease;
+}
+
+.current-step-text.loading {
+  opacity: 0;
+}
+
+.headline-timeline {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: 0.3s ease;
+}
+
+.headline-timeline.loading {
+  opacity: 0;
+  transform: translateY(6px);
 }
 
 .current-step-number {

@@ -63,7 +63,7 @@ function Drink({
           className="drink-selected-remove"
           onClick={() => handleDrinksRemove(drink)}
         >
-          <i className="fa fa-times red white-text"> </i>
+          <i className="fa fa-times red-text"> </i>
         </div>
         <div className="drink-selected-amount">
           <span>{amount >= 0 ? amount : ""}</span>

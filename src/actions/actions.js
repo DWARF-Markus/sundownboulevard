@@ -58,10 +58,10 @@ export const setDrink = (drink) => {
   };
 };
 
-export const setDrinkOnUpdate = (id) => {
+export const setDrinkOnUpdate = (drink) => {
   return {
     type: SET_DRINK_UPDATE,
-    payload: id,
+    payload: drink,
   };
 };
 

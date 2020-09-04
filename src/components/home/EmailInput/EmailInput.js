@@ -41,7 +41,7 @@ function EmailInput({
       clearDrinks();
       await fetch(
         `
-      https://krh-sundown.dev.dwarf.dk/api/bookings?filter[email]=${userEmail}&include=drinks,dishes&sort=startTime`,
+      https://krh-sundown.dev.dwarf.dk/api/bookings?filter[email]=${userEmail}&include=drinks,dishes,drinks.drinkInfo&sort=startTime`,
         {
           method: "GET",
           headers: {
@@ -63,7 +63,7 @@ function EmailInput({
             }
 
             const drinks = data[0].drinks.map((drink) =>
-              setDrinkOnUpdate(parseInt(drink["externalDrinkId"])),
+              setDrinkOnUpdate(drink.drink_info),
             );
 
             setEmail(userEmail);

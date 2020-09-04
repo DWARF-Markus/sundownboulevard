@@ -7,34 +7,49 @@ import data from "./timeline-banner.json";
 import "./TimelineBanner.scss";
 import { setBookingType } from "../../../actions/actions";
 
-function TimelineBanner(props) {
+function TimelineBanner({ step }) {
   const [backLocation, setBackLocation] = useState("/");
   const [currentStep, setCurrentStep] = useState(2);
   const [bookingType, setBookingType] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [timelineTitle, setTimelineTitle] = useState("");
   const [bannerTitle, setBannerTitle] = useState("");
   const [bannerDesc, setBannerDesc] = useState("");
 
   useEffect(() => {
+    console.log("mount");
+    setLoading(true);
     setCurrentStep(store.getState().reducer.step);
     setBookingType(store.getState().reducer.bookingType);
     setEmail(store.getState().reducer.bookingEmail);
-    data.map((step) => {
-      if (step.step === currentStep) {
-        setTimelineTitle(step.timelineTitle);
-        setBannerTitle(step.bannerTitle);
-        setBannerDesc(step.bannerDesc);
+    data.map((info) => {
+      if (info.step === step) {
+        setTimeout(() => {
+          setLoading(false);
+          setTimelineTitle(info.timelineTitle);
+          setBannerTitle(info.bannerTitle);
+          setBannerDesc(info.bannerDesc);
+          console.log("unmount");
+        }, 500);
       }
     });
-  });
+  }, [step]);
 
   return (
     <div className="timeline-banner-container">
       <div className="mobile-timeline-banner blue px-1">
         <BackBtn color="white-text" title="HOME" />
-        <h4 className="current-step-text white-text">{bannerTitle}</h4>
+        <h4
+          className={
+            loading
+              ? "current-step-text white-text loading"
+              : "current-step-text white-text"
+          }
+        >
+          {bannerTitle}
+        </h4>
         <h4 className="current-step-number white-text">
           <span>{currentStep}</span> / <span>5</span>
         </h4>
@@ -72,7 +87,15 @@ function TimelineBanner(props) {
           </div>
         </div>
         <div className="banner-wrapper blue">
-          <h4 className="mt-1 white-text">{bannerTitle}</h4>
+          <h4
+            className={
+              loading
+                ? "headline-timeline loading mt-1 white-text"
+                : "headline-timeline mt-1 white-text"
+            }
+          >
+            {bannerTitle}
+          </h4>
           <p className="mt-1 white-text">{bannerDesc}</p>
         </div>
         <p className="blue-text text-center mt-1 fadein-anim">

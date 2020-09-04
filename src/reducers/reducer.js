@@ -63,7 +63,11 @@ export default (state = initialState, action) => {
     case SET_DRINK_UPDATE:
       return {
         ...state,
-        drinks: [...state.drinks, action.payload],
+        drinks: [...state.drinks, parseInt(action.payload.id)],
+        drinksName: [
+          ...state.drinksName,
+          { id: parseInt(action.payload.id), name: action.payload.name },
+        ],
       };
     case SET_DISH_UPDATE:
       return {

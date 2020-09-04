@@ -51,12 +51,9 @@ function OrderPage({
           Authorization: token,
         },
       },
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setStep(2);
-        history.push("/");
-      });
+    );
+    setStep(2);
+    history.push("/");
   };
 
   const setPage = () => {
@@ -143,6 +140,7 @@ function OrderPage({
       <TimelineBanner
         currentBookingType={currentBookingType}
         dishTitle={currentDish.strMeal}
+        step={currentStep}
       />
       <div className="page-wrapper">
         <div className="fadein-animation">{currentPage}</div>
