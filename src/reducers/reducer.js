@@ -109,6 +109,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         drinks: [],
+        drinksName: [],
       };
     case CLEAR_DISH:
       return {

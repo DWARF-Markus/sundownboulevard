@@ -52,7 +52,13 @@ function ConfirmDisplay({
     }
   }, []);
 
+  const handleBackClick = () => {
+    window.scrollTo(0, 0);
+    setStep(3);
+  };
+
   const handleBooking = async () => {
+    window.scrollTo(0, 0);
     setLoading(true);
     console.log(drinks);
     console.log(dish);
@@ -137,9 +143,10 @@ function ConfirmDisplay({
         body: JSON.stringify({
           startTime: dateToSend,
           numberOfPeople: peopleAmountInput,
+          email: emailInput,
         }),
       });
-      console.log("update2");
+
       await fetch(
         `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/dishes?dishes[0][dishId]=${dish.idMeal}`,
         {
@@ -220,128 +227,144 @@ function ConfirmDisplay({
   }
 
   return (
-    <div className="confirm-display-wrapper">
-      <div className="confirm-display-container opacity-animation p-1">
-        <div
-          className={
-            currentBookingType === "updateBooking"
-              ? "input-pair disabled"
-              : "input-pair"
-          }
-        >
-          <label htmlFor="confirmEmail">Email</label>
-          {emailValid === false ? (
-            <label className="blue-text">please enter a valid email</label>
-          ) : (
-            <></>
-          )}
-          <input
-            id="confirmEmail"
-            name="confirmEmail"
-            value={emailInput}
-            type="email"
-            onChange={(e) => handleEmail(e.target.value)}
-          />
-        </div>
-        <div className="hours-container mt-1">
-          <p className="hours-title px-1">OPENING HOURS ARE</p>
-          <div className="hours-wrapper p-1">
-            <ul className="left">
-              <li>MONDAY</li>
-              <li>TUESDAY</li>
-              <li>WEDNESDAY</li>
-              <li>THURSDAY</li>
-              <li>FRIDAY</li>
-              <li>SATURDAY</li>
-              <li>SUNDAY</li>
-            </ul>
-            <ul className="right">
-              <li>16:00 - 23:00</li>
-              <li>16:00 - 23:00</li>
-              <li>16:00 - 23:00</li>
-              <li>16:00 - 23:00</li>
-              <li>16:00 - 23:00</li>
-              <li>CLOSED</li>
-              <li>CLOSED</li>
-            </ul>
-          </div>
-        </div>
-        <div className="input-pair">
-          <label htmlFor="confirmEmail">DATE</label>
-          {dateValid ? (
-            <></>
-          ) : (
-            <label className="blue-text">
-              Please choose a time where we're open
-            </label>
-          )}
-        </div>
-        <DateTimePicker
-          value={dateInput}
-          minDate={new Date()}
-          onChange={(e) => validateDate(e)}
-          format="dd-MM-y HH:mm"
-          locale="da-dk"
-          maxDetail="minute"
-          required
-        />
-        <div className="input-pair mt-1">
-          <label htmlFor="peopleAmount">AMOUNT OF PEOPLE</label>
-          {peopleAmountValid ? (
-            <></>
-          ) : (
-            <label className="blue-text">
-              Only between 1-10 people allowed
-            </label>
-          )}
-          <div className="mt-1">
-            <InputRange
-              maxValue={10}
-              minValue={1}
-              value={parseInt(peopleAmountInput)}
-              onChange={(value) => validatePeopleAmount({ value })}
+    <>
+      <div className="confirm-display-wrapper">
+        <div className="confirm-display-container opacity-animation p-1">
+          <div
+            className={
+              currentBookingType === "updateBooking"
+                ? "input-pair disabled"
+                : "input-pair"
+            }
+          >
+            <label htmlFor="confirmEmail">Email</label>
+            {emailValid === false ? (
+              <label className="blue-text">please enter a valid email</label>
+            ) : (
+              <></>
+            )}
+            <input
+              id="confirmEmail"
+              name="confirmEmail"
+              value={emailInput}
+              type="email"
+              onChange={(e) => handleEmail(e.target.value)}
             />
           </div>
-        </div>
-        {currentBookingType === "updateBooking" &&
-        emailValid &&
-        dateValid &&
-        peopleAmountValid ? (
-          <button className="confirm-btn" onClick={() => handleBooking()}>
-            UPDATE{" "}
-            <span>
-              <i className="fa fa-check"></i>
-            </span>
-          </button>
-        ) : (currentBookingType === "updateBooking" && !emailValid) ||
-          !dateValid ||
-          !peopleAmountValid ? (
-          <button className="confirm-btn disabled">
-            UPDATE{" "}
-            <span>
-              <i className="fa fa-check"></i>
-            </span>
-          </button>
-        ) : currentBookingType === "newBooking" &&
+          <div className="hours-container mt-1">
+            <p className="hours-title px-1">OPENING HOURS ARE</p>
+            <div className="hours-wrapper p-1">
+              <ul className="left">
+                <li>MONDAY</li>
+                <li>TUESDAY</li>
+                <li>WEDNESDAY</li>
+                <li>THURSDAY</li>
+                <li>FRIDAY</li>
+                <li>SATURDAY</li>
+                <li>SUNDAY</li>
+              </ul>
+              <ul className="right">
+                <li>16:00 - 23:00</li>
+                <li>16:00 - 23:00</li>
+                <li>16:00 - 23:00</li>
+                <li>16:00 - 23:00</li>
+                <li>16:00 - 23:00</li>
+                <li>CLOSED</li>
+                <li>CLOSED</li>
+              </ul>
+            </div>
+          </div>
+          <div className="input-pair">
+            <label htmlFor="confirmEmail">DATE</label>
+            {dateValid ? (
+              <></>
+            ) : (
+              <label className="blue-text">
+                Please choose a time where we're open
+              </label>
+            )}
+          </div>
+          <DateTimePicker
+            value={dateInput}
+            minDate={new Date()}
+            onChange={(e) => validateDate(e)}
+            format="dd-MM-y HH:mm"
+            locale="da-dk"
+            maxDetail="minute"
+            required
+          />
+          <div className="input-pair mt-1">
+            <label htmlFor="peopleAmount">AMOUNT OF PEOPLE</label>
+            {peopleAmountValid ? (
+              <></>
+            ) : (
+              <label className="blue-text">
+                Only between 1-10 people allowed
+              </label>
+            )}
+            <div className="mt-1">
+              <InputRange
+                maxValue={10}
+                minValue={1}
+                value={parseInt(peopleAmountInput)}
+                onChange={(value) => validatePeopleAmount({ value })}
+              />
+            </div>
+          </div>
+          {currentBookingType === "updateBooking" &&
           emailValid &&
           dateValid &&
           peopleAmountValid ? (
-          <button className="confirm-btn" onClick={() => handleBooking()}>
-            CONFIRM{" "}
-            <span>
-              <i className="fa fa-check"></i>
-            </span>
-          </button>
-        ) : (
-          <button className="confirm-btn disabled">
-            CONFIRM{" "}
-            <span>
-              <i className="fa fa-check"></i>
-            </span>
-          </button>
-        )}
+            <button className="confirm-btn" onClick={() => handleBooking()}>
+              UPDATE{" "}
+              <span>
+                <i className="fa fa-check"></i>
+              </span>
+            </button>
+          ) : (currentBookingType === "updateBooking" && !emailValid) ||
+            !dateValid ||
+            !peopleAmountValid ? (
+            <button className="confirm-btn disabled">
+              UPDATE{" "}
+              <span>
+                <i className="fa fa-check"></i>
+              </span>
+            </button>
+          ) : currentBookingType === "newBooking" &&
+            emailValid &&
+            dateValid &&
+            peopleAmountValid ? (
+            <button className="confirm-btn" onClick={() => handleBooking()}>
+              CONFIRM{" "}
+              <span>
+                <i className="fa fa-check"></i>
+              </span>
+            </button>
+          ) : (
+            <button className="confirm-btn disabled">
+              CONFIRM{" "}
+              <span>
+                <i className="fa fa-check"></i>
+              </span>
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+      <div className="btn-container px-1">
+        <div className="text-left">
+          <div className="back-container">
+            <button
+              className="primary-back-btn blue-text"
+              onClick={() => handleBackClick()}
+            >
+              {" "}
+              <i className="fa fa-caret-left"> </i>
+              DRINKS
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

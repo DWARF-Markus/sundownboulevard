@@ -25,7 +25,7 @@ function HomePage({ setStep, setBookingType }) {
   };
 
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper pt-70">
       <div className="home-page-wrapper">
         <div className="slider-box">
           <Slider slides={sliderImages} autoPlay={3} />
@@ -36,8 +36,9 @@ function HomePage({ setStep, setBookingType }) {
             Our passion is making food with fresh and local ingredients
           </h1>
           <p className="mt-1">
-            lorem lorem lorem la la la asd lorem lorem lorem la la la asd lorem
-            lorem lorem la la la asd lorem lorem lorem la la la asd
+            Welcome to an innovative dining experience. Here you get to choose a
+            random dish from our massive menu, and we will make sure it will be
+            unforgettable.
           </p>
           <button
             className="primary-home-btn primary-cat"

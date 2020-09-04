@@ -15,7 +15,7 @@ function DrinksDisplay({
   bookingPeople,
 }) {
   const [uiDrinks, setUiDrinks] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [processingBooking, setProcessingBooking] = useState(false);
 
   useEffect(() => {
@@ -24,40 +24,25 @@ function DrinksDisplay({
       .then((res) => res.json())
       .then((data) => {
         setUiDrinks(data);
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 750);
       });
   }, []);
 
   const handleBackClick = () => {
     setStep(2);
+    window.scrollTo(0, 0);
   };
 
-  const handleDrinkSubmit = async () => {
+  const handleDrinkSubmit = () => {
+    window.scrollTo(0, 0);
     setProcessingBooking(true);
 
     setTimeout(() => {
       setProcessingBooking(false);
       setStep(4);
     }, 800);
-
-    // const drinksToPost = drinks
-    //   .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
-    //   .join("&");
-
-    // await fetch(
-    //   `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/drinks?${drinksToPost}`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: token,
-    //     },
-    //   },
-    // )
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
   };
 
   if (loading || processingBooking) {
@@ -101,7 +86,7 @@ function DrinksDisplay({
             >
               {" "}
               <i className="fa fa-caret-left"> </i>
-              BACK
+              DISHES
             </button>
           </div>
         </div>
@@ -111,7 +96,7 @@ function DrinksDisplay({
             <button className="disabled-btn">CHOOSE MIN 1 DRINK</button>
           ) : (
             <button className="primary-btn" onClick={() => handleDrinkSubmit()}>
-              NEXT
+              CONFIRM
               <i className="fa fa-caret-right"> </i>
             </button>
           )}

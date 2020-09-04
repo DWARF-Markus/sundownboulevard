@@ -1,7 +1,21 @@
+@keyframes quickFadeIn {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .dish-display-container {
   display: grid;
   grid-template-columns: 1fr;
   margin-top: 50px !important;
+  animation-name: quickFadeIn;
+  animation-duration: 1.3s;
 
   h1 {
     font-weight: 600;

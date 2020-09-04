@@ -4,12 +4,14 @@
   width: 100%;
   height: 50px;
   align-items: center;
+  padding-top: 70px;
 }
 
 .timeline-banner-container {
   position: fixed;
   width: 100%;
   z-index: 100;
+  padding-top: 50px;
 }
 
 .current-step-text {
@@ -29,7 +31,7 @@
   }
 }
 
-@keyframes fadein {
+@keyframes slidein {
   0% {
     opacity: 0;
   }
@@ -50,6 +52,23 @@
     font-weight: 100;
     padding: 0 10%;
   }
+}
+
+@keyframes opacityInAnim {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadein-anim {
+  animation-name: opacityInAnim;
+  animation-duration: 2s;
 }
 
 .desktop-wrapper {
@@ -77,7 +96,7 @@
   background-color: white;
   z-index: 1000;
   margin-top: 17px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.137);
   animation-name: slidein;
   animation-duration: 1.7s;
   animation-direction: forward;
@@ -165,6 +184,10 @@
   animation-duration: 0.4s;
 }
 
+.done::before {
+  animation-duration: 0s;
+}
+
 .timeline-entry.active {
   .icon {
     display: grid;
@@ -247,6 +270,7 @@
 
   .timeline-banner-container {
     position: relative;
+    padding-top: 70px;
   }
 
   .desktop-wrapper {

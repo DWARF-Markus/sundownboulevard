@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { getDish, setStep, setDishOnUpdate } from "../actions/actions";
+import {
+  getDish,
+  setStep,
+  setDishOnUpdate,
+  clearDish,
+  clearDrinks,
+} from "../actions/actions";
+import token from "../token";
 import image from "../images/blue-beach.png";
 import store from "../store";
 import TimelineBanner from "../components/ui/TimelineBanner/TimelineBanner";
@@ -12,7 +20,14 @@ import PrimaryBtn from "../components/ui/PrimaryBtn/PrimaryBtn";
 import PrimaryBackBtn from "../components/ui/PrimaryBackBtn/PrimaryBackBtn";
 import "./OrderPage.scss";
 
-function OrderPage({ getDish, setStep, setDishOnUpdate, reducer }) {
+function OrderPage({
+  getDish,
+  setStep,
+  setDishOnUpdate,
+  reducer,
+  clearDrinks,
+  clearDish,
+}) {
   const [currentDish, setCurrentDish] = useState("");
   const [currentStep, setCurrentStep] = useState("");
   const [drinks, setDrinks] = useState("");
@@ -22,6 +37,27 @@ function OrderPage({ getDish, setStep, setDishOnUpdate, reducer }) {
   const [currentBookingType, setCurrentBookingType] = useState("");
   const [loading, setLoading] = useState(true);
   const [dishId, setDishId] = useState("");
+
+  let history = useHistory();
+
+  const handleCancelClick = async () => {
+    await fetch(
+      `
+    https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookingId}/destroy`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      },
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setStep(2);
+        history.push("/");
+      });
+  };
 
   const setPage = () => {
     if (currentStep === 2)
@@ -74,14 +110,14 @@ function OrderPage({ getDish, setStep, setDishOnUpdate, reducer }) {
       setBookingId(bookingId);
       setCurrentBookingType(bookingType);
     });
-
     return unsubscribe;
   });
 
   useEffect(() => {
-    if (reducer.bookingType === "newBooking") {
+    if (reducer.bookingType === "newBooking" || reducer.bookingType === null) {
+      clearDrinks();
+      clearDish();
       getDish();
-      console.log("new");
     }
 
     setTimeout(() => {
@@ -103,13 +139,27 @@ function OrderPage({ getDish, setStep, setDishOnUpdate, reducer }) {
   }
 
   return (
-    <div className="page-wrapper">
+    <>
       <TimelineBanner
         currentBookingType={currentBookingType}
         dishTitle={currentDish.strMeal}
       />
-      <div className="fadein-animation">{currentPage}</div>
-    </div>
+      <div className="page-wrapper">
+        <div className="fadein-animation">{currentPage}</div>
+      </div>
+      <div className="text-left mt-1 px-1">
+        {currentBookingType === "updateBooking" ? (
+          <button
+            className="delete-btn white-text red"
+            onClick={() => handleCancelClick()}
+          >
+            <i className="fa fa-times"> </i>Cancel booking
+          </button>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 }
 
@@ -117,6 +167,10 @@ const mapStateToProps = (state) => ({
   reducer: state.reducer,
 });
 
-export default connect(mapStateToProps, { getDish, setStep, setDishOnUpdate })(
-  OrderPage,
-);
+export default connect(mapStateToProps, {
+  getDish,
+  setStep,
+  setDishOnUpdate,
+  clearDrinks,
+  clearDish,
+})(OrderPage);

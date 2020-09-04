@@ -33,7 +33,7 @@ function TimelineBanner(props) {
   return (
     <div className="timeline-banner-container">
       <div className="mobile-timeline-banner blue px-1">
-        <BackBtn color="white-text" title="HOME" navigateTo={backLocation} />
+        <BackBtn color="white-text" title="HOME" />
         <h4 className="current-step-text white-text">{bannerTitle}</h4>
         <h4 className="current-step-number white-text">
           <span>{currentStep}</span> / <span>5</span>
@@ -75,7 +75,7 @@ function TimelineBanner(props) {
           <h4 className="mt-1 white-text">{bannerTitle}</h4>
           <p className="mt-1 white-text">{bannerDesc}</p>
         </div>
-        <p className="blue-text text-center mt-1">
+        <p className="blue-text text-center mt-1 fadein-anim">
           {bookingType === "updateBooking"
             ? `You are currently updating your booking on ${email}`
             : ""}

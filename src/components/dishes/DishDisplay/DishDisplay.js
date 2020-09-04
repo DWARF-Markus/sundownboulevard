@@ -8,34 +8,14 @@ import "./DishDisplay.scss";
 
 function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
   let history = useHistory();
-  useEffect(() => {
-    if (currentBookingType === "newBooking") {
-      getDish();
-    }
-  }, []);
 
   const handleDishSubmit = async () => {
+    window.scrollTo(0, 0);
     setStep(3);
-    // await fetch(
-    //   `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/dishes?dishes[0][dishId]=${dish.idMeal}`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: token,
-    //     },
-    //   },
-    // )
-    //   .then((res) => {
-    //     setStep(4);
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
   };
 
   const handleBackClick = () => {
+    window.scrollTo(0, 0);
     history.push("/");
   };
 
@@ -68,7 +48,7 @@ function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
             >
               {" "}
               <i className="fa fa-caret-left"> </i>
-              BACK
+              HOME
             </button>
           </div>
         </div>
@@ -78,7 +58,7 @@ function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
             className="primary-btn blue"
             onClick={() => handleDishSubmit()}
           >
-            NEXT
+            DRINKS
             <i className="fa fa-caret-right"> </i>
           </button>
         </div>
