@@ -5,6 +5,8 @@
   align-items: center;
   justify-items: center;
   padding: 70px 0;
+  width: 100%;
+  min-height: calc(100vh - 90px);
 }
 
 .confirm-display-container {
@@ -97,6 +99,54 @@
   background-color: #007ddb !important;
 }
 
+.date-picker {
+  background-color: white !important;
+  padding: 6px;
+  text-align: center;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #007cdb34 !important;
+  // box-shadow: 0 4px 6px lightgray;
+  color: #007ddb;
+  transition: 0.2s ease;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.date-picker.react-datepicker-ignore-onclickoutside {
+  background-color: #007ddb !important;
+  color: white;
+}
+
+.react-datepicker__header {
+  background-color: #007ddb !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header,
+.react-datepicker__day-name,
+.react-datepicker__time-name {
+  color: white !important;
+}
+
+.date-picker:hover {
+  background-color: #007ddb !important;
+  color: white;
+}
+
+.rc-time-picker-input {
+  text-align: center;
+  font-size: 18px;
+  padding: 10px;
+  color: #007ddb !important;
+}
+
+.rc-time-picker-input:focus {
+  color: white !important;
+  background-color: #007ddb;
+}
+
 @keyframes spin {
   0% {
     transform: rotateY(0deg);
@@ -115,5 +165,6 @@
 @media (min-width: 630px) {
   .confirm-display-wrapper {
     padding: 30px 0;
+    min-height: 0px !important;
   }
 }

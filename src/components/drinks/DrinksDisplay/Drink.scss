@@ -3,6 +3,7 @@
   display: flex;
   box-shadow: 0;
   transition: 0.1s ease;
+  min-height: 185px;
   border: 3px solid #f3f3f3;
   transition: 0.15s ease;
   border-radius: 5px;
@@ -23,6 +24,7 @@
 
 .drink-image {
   max-width: 70px;
+  min-width: 70px;
   position: relative;
   display: grid;
   align-items: center;
@@ -97,4 +99,15 @@
     color: white;
     pointer-events: none;
   }
+}
+
+.loading-image {
+  opacity: 1;
+  transform: translateX(0px);
+  transition: 0.18s ease;
+}
+
+.loading-image.hidden {
+  opacity: 0;
+  transform: translateX(-30px);
 }

@@ -1,31 +1,33 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable radix */
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { setDrink, removeDrink } from "../../../actions/actions";
+import loader from "../../../images/blue-beach.png";
 import "./Drink.scss";
 
-function Drink({
-  drink,
-  setDrink,
-  removeDrink,
-  selected,
-  drinksAmount,
-  bookingPeople,
-}) {
+function Drink({ drink, setDrink, removeDrink, selected }) {
   const [isSelected, setIsSelected] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [doneLoading, setDoneLoading] = useState(false);
 
   useEffect(() => {
     const alreadySelected = selected;
-    if (alreadySelected.includes(drink.id)) {
-      setIsSelected(true);
 
-      alreadySelected.map((alreadySelectedDrink) => {
-        if (alreadySelectedDrink === drink.id) {
-          setAmount((amount) => amount + 1);
-        }
-      });
-    }
+    alreadySelected.map((entry) => {
+      if (parseInt(entry) === parseInt(drink.id)) {
+        setIsSelected(true);
+        setAmount((amount) => amount + 1);
+      }
+    });
   }, []);
+
+  const imageLoading = () => {
+    setDoneLoading(true);
+  };
 
   const handleDrinkSelect = (id, name) => {
     setDrink(id, name);
@@ -56,6 +58,7 @@ function Drink({
         }
       >
         <div
+          role="button"
           className="drink-selected-remove"
           onClick={() => handleDrinksRemove(drink)}
         >
@@ -65,10 +68,20 @@ function Drink({
           <span>{amount >= 0 ? amount : ""}</span>
         </div>
       </div>
-      <div className="drink-image" onClick={() => handleDrinkSelect(drink)}>
-        <img src={drink.image_url} alt="Image of beer" />
+      <div
+        role="button"
+        className="drink-image"
+        onClick={() => handleDrinkSelect(drink)}
+      >
+        <div className={doneLoading ? "loading-image" : "loading-image hidden"}>
+          <img onLoad={() => imageLoading()} src={drink.image_url} alt="beer" />
+        </div>
       </div>
-      <div className="drink-desc" onClick={() => handleDrinkSelect(drink)}>
+      <div
+        role="button"
+        className="drink-desc"
+        onClick={() => handleDrinkSelect(drink)}
+      >
         <h3>{drink.name}</h3>
         <p>{drink.description}</p>
         <p className="logo-text blue-text mt-1">{drink.abv}%</p>

@@ -101,13 +101,20 @@ export const setBookingType = (type) => {
 export const getDish = () => async (dispatch) => {
   try {
     const res = await fetch(
-      "https://www.themealdb.com/api/json/v1/1/random.php",
+      "https://krh-sundown.dev.dwarf.dk/api/user/dishes?guestCount=1",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+        },
+      },
     );
     const data = await res.json();
 
     dispatch({
       type: GET_DISH,
-      payload: data.meals[0],
+      payload: data[0].meals[0],
     });
   } catch (err) {
     dispatch({

@@ -2,6 +2,7 @@
   margin-top: 50px !important;
   display: grid;
   grid-template-columns: 1fr;
+  min-height: calc(100vh - 90px);
 }
 
 @media (min-width: 630px) {

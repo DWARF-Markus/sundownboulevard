@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+/* eslint-disable no-shadow */
+import React from "react";
 import "./HomePage.scss";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 
-import PrimaryBtn from "../components/ui/PrimaryBtn/PrimaryBtn";
 import Slider from "../components/home/Slider/Slider";
 import EmailInput from "../components/home/EmailInput/EmailInput";
 import ContentBox from "../components/home/ContentBox/ContentBox";
 
-import { connect } from "react-redux";
 import { setStep, setBookingType } from "../actions/actions";
 
 import foodImageOne from "../images/food-image1.jpg";
@@ -15,12 +15,13 @@ import foodImageTwo from "../images/food-image2.jpg";
 import foodImageThree from "../images/food-image3.jpg";
 
 function HomePage({ setStep, setBookingType }) {
-  let history = useHistory();
+  const history = useHistory();
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
 
   const handleNewBookClick = () => {
     setBookingType("newBooking");
     setStep(2);
+    window.scrollTo(0, 0);
     history.push("/order");
   };
 
@@ -41,6 +42,7 @@ function HomePage({ setStep, setBookingType }) {
             unforgettable.
           </p>
           <button
+            type="submit"
             className="primary-home-btn primary-cat"
             onClick={() => handleNewBookClick()}
           >

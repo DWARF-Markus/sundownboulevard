@@ -1,7 +1,8 @@
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { setStep } from "../../../actions/actions";
 import { Link } from "react-router-dom";
+import { setStep } from "../../../actions/actions";
 import store from "../../../store";
 import "./PrimaryBackBtn.scss";
 
@@ -34,8 +35,12 @@ function PrimaryBackBtn({ decrease, title, icon, setStep }) {
           <i className="fa fa-home red-text"> </i>
         </Link>
       ) : (
-        <button className="primary-back-btn" onClick={() => handleClick()}>
-          <i className={icon}></i>
+        <button
+          type="submit"
+          className="primary-back-btn"
+          onClick={() => handleClick()}
+        >
+          <i className={icon} />
           {title}
         </button>
       )}

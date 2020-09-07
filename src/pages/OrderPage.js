@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
@@ -7,6 +9,7 @@ import {
   setDishOnUpdate,
   clearDish,
   clearDrinks,
+  setBookingType,
 } from "../actions/actions";
 import image from "../images/blue-beach.png";
 import store from "../store";
@@ -15,11 +18,16 @@ import DishDisplay from "../components/dishes/DishDisplay/DishDisplay";
 import DrinksDisplay from "../components/drinks/DrinksDisplay/DrinksDisplay";
 import ConfirmDisplay from "../components/confirm/ConfirmDisplay/ConfirmDisplay";
 import ReceiptDisplay from "../components/confirm/ReceiptDisplay/ReceiptDisplay";
-import PrimaryBtn from "../components/ui/PrimaryBtn/PrimaryBtn";
-import PrimaryBackBtn from "../components/ui/PrimaryBackBtn/PrimaryBackBtn";
 import "./OrderPage.scss";
 
-function OrderPage({ getDish, setStep, reducer, clearDrinks, clearDish }) {
+function OrderPage({
+  getDish,
+  setStep,
+  reducer,
+  clearDrinks,
+  clearDish,
+  setBookingType,
+}) {
   const [currentDish, setCurrentDish] = useState("");
   const [currentStep, setCurrentStep] = useState("");
   const [drinks, setDrinks] = useState("");
@@ -82,13 +90,13 @@ function OrderPage({ getDish, setStep, reducer, clearDrinks, clearDish }) {
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
-      const dish = store.getState().reducer.dish;
-      const step = store.getState().reducer.step;
-      const drinks = store.getState().reducer.drinks;
+      const { dish } = store.getState().reducer;
+      const { step } = store.getState().reducer;
+      const { drinks } = store.getState().reducer;
       const drinksAmount = store.getState().reducer.drinks.length;
-      const bookingPeople = store.getState().reducer.bookingPeople;
-      const bookingId = store.getState().reducer.bookingId;
-      const bookingType = store.getState().reducer.bookingType;
+      const { bookingPeople } = store.getState().reducer;
+      const { bookingId } = store.getState().reducer;
+      const { bookingType } = store.getState().reducer;
 
       setCurrentDish(dish);
       setCurrentStep(step);
@@ -99,10 +107,12 @@ function OrderPage({ getDish, setStep, reducer, clearDrinks, clearDish }) {
       setCurrentBookingType(bookingType);
     });
     return unsubscribe;
+    console.log("triggered");
   });
 
   useEffect(() => {
     if (reducer.bookingType === "newBooking" || reducer.bookingType === null) {
+      setBookingType("newBooking");
       clearDrinks();
       clearDish();
       getDish();
@@ -115,11 +125,11 @@ function OrderPage({ getDish, setStep, reducer, clearDrinks, clearDish }) {
 
   if (loading) {
     return (
-      <div className="confirm-display-wrapper mt-2 loader-page">
-        <div className="confirm-loading-screen mt-2">
-          <div className="confirm-loader mt-2">
+      <div className="confirm-display-wrapper min-height">
+        <div className="confirm-loading-screen">
+          <div className="confirm-loader">
             <img className="loader-animation" src={image} alt="loading icon" />
-            <p className="logo-text blue-text">Loading ...</p>
+            <p className="logo-text blue-text">Loading dish ...</p>
           </div>
         </div>
       </div>
@@ -139,6 +149,7 @@ function OrderPage({ getDish, setStep, reducer, clearDrinks, clearDish }) {
       <div className="text-left mt-1 px-1">
         {currentBookingType === "updateBooking" ? (
           <button
+            type="submit"
             className="delete-btn white-text red"
             onClick={() => handleCancelClick()}
           >
@@ -162,4 +173,5 @@ export default connect(mapStateToProps, {
   setDishOnUpdate,
   clearDrinks,
   clearDish,
+  setBookingType,
 })(OrderPage);

@@ -143,6 +143,12 @@
     justify-content: center;
     z-index: 200;
 
+    :hover {
+      transform: scale(1.1);
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
     div {
       margin-top: 5px;
       opacity: 1;
@@ -198,7 +204,7 @@
 .active::before {
   width: 70px;
   animation-name: timelineSlide;
-  animation-duration: 0.4s;
+  animation-duration: 0.1s;
 }
 
 .done::before {
@@ -239,10 +245,16 @@
   z-index: -1;
 }
 
-.timeline-entry:first-of-type {
+.timeline-entry:first-of-type,
+.timeline-entry:last-of-type {
   span {
     margin-top: 4px !important;
     color: black;
+  }
+
+  :hover {
+    cursor: default !important;
+    transform: none !important;
   }
 }
 

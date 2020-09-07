@@ -1,22 +1,41 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from "react";
+import { setStep } from "../../../actions/actions";
+import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 import store from "../../../store";
 import BackBtn from "./BackBtn";
-import { connect } from "react-redux";
 import data from "./timeline-banner.json";
 import "./TimelineBanner.scss";
-import { setBookingType } from "../../../actions/actions";
 
-function TimelineBanner({ step }) {
-  const [backLocation, setBackLocation] = useState("/");
+function TimelineBanner({ step, setStep }) {
   const [currentStep, setCurrentStep] = useState(2);
   const [bookingType, setBookingType] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [timelineTitle, setTimelineTitle] = useState("");
   const [bannerTitle, setBannerTitle] = useState("");
   const [bannerDesc, setBannerDesc] = useState("");
+
+  const history = useHistory();
+
+  const handleHomeClick = () => {
+    history.push("/");
+  };
+
+  const handleTimelineClick = (e) => {
+    console.log(e);
+    console.log(parseInt(e));
+    if (parseInt(e) === 1 || parseInt(e) === 5) {
+      // wrong error
+    } else {
+      setStep(e);
+      window.scrollTo(0, 0);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -27,7 +46,6 @@ function TimelineBanner({ step }) {
       if (info.step === step) {
         setTimeout(() => {
           setLoading(false);
-          setTimelineTitle(info.timelineTitle);
           setBannerTitle(info.bannerTitle);
           setBannerDesc(info.bannerDesc);
         }, 500);
@@ -38,7 +56,13 @@ function TimelineBanner({ step }) {
   return (
     <div className="timeline-banner-container">
       <div className="mobile-timeline-banner blue px-1">
-        <BackBtn color="white-text" title="HOME" />
+        <div
+          className="back-button"
+          onClick={() => handleHomeClick()}
+          role="button"
+        >
+          <BackBtn color="white-text" title="HOME" />
+        </div>
         <h4
           className={
             loading
@@ -56,28 +80,30 @@ function TimelineBanner({ step }) {
         <div className="absolute">
           <div className="timeline-container">
             <div className="timeline-wrapper">
-              {data.map((step, i) => {
+              {data.map((currStep, i) => {
                 return (
                   <div
-                    key={i}
                     className={
-                      step.step === currentStep
+                      currStep.step === currentStep
                         ? "timeline-entry active"
-                        : step.step < currentStep
+                        : currStep.step < currentStep
                         ? "timeline-entry done"
                         : "timeline-entry"
                     }
                   >
-                    <div className="icon">
-                      {step.step === currentStep ? (
+                    <div
+                      className="icon"
+                      onClick={() => handleTimelineClick(currStep.step)}
+                    >
+                      {currStep.step === currentStep ? (
                         <div className="blue-text circle"> </div>
-                      ) : step.step > currentStep ? (
+                      ) : currStep.step > currentStep ? (
                         <div className="black-text circle" />
                       ) : (
                         <i className="fa fa-check white-text checked blue" />
                       )}
                     </div>
-                    <span>{step.timelineTitle}</span>
+                    <span>{currStep.timelineTitle}</span>
                   </div>
                 );
               })}
@@ -110,4 +136,4 @@ const mapStateToProps = (state) => ({
   reducer: state.reducer,
 });
 
-export default connect(mapStateToProps)(TimelineBanner);
+export default connect(mapStateToProps, { setStep })(TimelineBanner);

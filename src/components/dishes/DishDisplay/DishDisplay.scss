@@ -16,6 +16,7 @@
   margin-top: 50px !important;
   animation-name: quickFadeIn;
   animation-duration: 1.3s;
+  min-height: calc(100vh - 90px);
 
   h1 {
     font-weight: 600;
@@ -45,6 +46,7 @@
   .dish-display-container {
     grid-template-columns: 1fr 1fr;
     margin-top: 0px !important;
+    min-height: 0px;
   }
 
   p {

@@ -28,10 +28,12 @@ function App() {
         <div className="App">
           <nav className="navbar-container white">
             <div className="navbar-wrapper">
-              <div className="navbar-logo">
-                <img src={logo} alt="Sundown Boulevard logo" />
-                <p className="logo-text">SUNDOWN BOULEVARD</p>
-              </div>
+              <Link to="/">
+                <div className="navbar-logo">
+                  <img src={logo} alt="Sundown Boulevard logo" />
+                  <p className="logo-text">SUNDOWN BOULEVARD</p>
+                </div>
+              </Link>
               <div onClick={() => toggleNav()} className="navbar-mobile-menu">
                 <div
                   className={

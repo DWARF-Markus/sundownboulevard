@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-plusplus */
 import React, { useState, useEffect } from "react";
 import Moment from "react-moment";
 import { useHistory } from "react-router-dom";
@@ -6,7 +8,7 @@ import { setStep } from "../../../actions/actions";
 import "./ReceiptDisplay.scss";
 
 function ReceiptDisplay({ data, setStep }) {
-  let history = useHistory();
+  const history = useHistory();
 
   const [dish, setDish] = useState("");
   const [drinks, setDrinks] = useState([]);
@@ -19,7 +21,7 @@ function ReceiptDisplay({ data, setStep }) {
   useEffect(() => {
     setDish(data.dish.strMeal);
     setEmail(data.bookingEmail);
-    setDate(data.bookingDate);
+    setDate(new Date(data.bookingDate));
     setGuests(data.bookingPeople);
     setDrinks(data.drinksName);
 
@@ -75,7 +77,7 @@ function ReceiptDisplay({ data, setStep }) {
           <p>
             Date and time{" "}
             <span>
-              <Moment format="DD/MM/YYYY HH:mm">{date}</Moment>
+              <Moment format="MM/DD/YYYY HH:mm">{data.bookingDate}</Moment>
             </span>
           </p>
           <p>
@@ -83,7 +85,11 @@ function ReceiptDisplay({ data, setStep }) {
           </p>
         </div>
       </div>
-      <button className="confirm-btn mt-2" onClick={() => handleHomeBtn()}>
+      <button
+        type="submit"
+        className="confirm-btn mt-2"
+        onClick={() => handleHomeBtn()}
+      >
         HOME
       </button>
     </div>

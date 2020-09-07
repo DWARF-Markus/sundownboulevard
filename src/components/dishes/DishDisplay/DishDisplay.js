@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
-import token from "../../../token";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import store from "../../../store";
 import { getDish, setStep } from "../../../actions/actions";
 import "./DishDisplay.scss";
 

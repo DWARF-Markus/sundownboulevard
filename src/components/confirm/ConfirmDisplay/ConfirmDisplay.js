@@ -1,26 +1,33 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable radix */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from "react";
-import DateTimePicker from "react-datetime-picker";
-import InputRange from "react-input-range";
-import image from "../../../images/blue-beach.png";
-import * as EmailValidator from "email-validator";
 import { connect } from "react-redux";
+import "moment/locale/en-gb";
+import moment from "moment";
+import DatePicker, { registerLocale } from "react-datepicker";
+import TimePicker from "rc-time-picker";
+import "rc-time-picker/assets/index.css";
+import enGb from "date-fns/locale/en-GB";
+import InputRange from "react-input-range";
+import * as EmailValidator from "email-validator";
+import image from "../../../images/blue-beach.png";
 import {
   setStep,
   setEmail,
   setDate,
   setPeopleAmount,
-  setBookingId,
-  clearDish,
 } from "../../../actions/actions";
 import "./ConfirmDisplay.scss";
+import "react-datepicker/dist/react-datepicker.css";
 
 function ConfirmDisplay({
   setStep,
   setEmail,
   setDate,
   setPeopleAmount,
-  setBookingId,
-  clearDish,
+
   drinks,
   dish,
   reducer,
@@ -28,28 +35,68 @@ function ConfirmDisplay({
   id,
 }) {
   const [emailInput, setEmailInput] = useState("");
-  const [dateInput, setDateInput] = useState("");
-  const [peopleAmountInput, setPeopleAmountInput] = useState("");
   const [emailValid, setEmailValid] = useState(null);
+  const [dateInput, setDateInput] = useState("");
   const [dateValid, setDateValid] = useState(true);
+
+  const [timeInput, setTimeInput] = useState(new Date());
+  const [timeValid, setTimeValid] = useState(undefined);
+
+  const [peopleAmountInput, setPeopleAmountInput] = useState("");
   const [peopleAmountValid, setPeopleAmountValid] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [localBookId, setLocalBookId] = useState("");
+
+  const [dateToSend, setDateToSend] = useState("");
+
+  registerLocale("en-gb", enGb);
+
+  const handleDateChange = (value) => {
+    const newDate = new Date(value);
+
+    const formattedDate = `${newDate.getDate()}-${
+      newDate.getMonth() + 1
+    }-${newDate.getFullYear()}`;
+
+    setDateInput(newDate);
+    setDateToSend(formattedDate);
+    setDate(`${formattedDate} ${timeInput}`);
+  };
+
+  const handleTimeChange = (value) => {
+    const selectedHour = new Date(value).getHours();
+
+    if (selectedHour >= 18 && selectedHour < 23) {
+      setTimeInput(value.format("HH:mm"));
+      setTimeValid(true);
+      setDate(`${dateToSend} ${value.format("HH:mm")}`);
+    } else {
+      setTimeValid(false);
+    }
+  };
 
   useEffect(() => {
     if (currentBookingType === "updateBooking") {
+      handleDateChange(reducer.bookingDate);
+      handleTimeChange(moment(reducer.bookingDate));
+
       setEmailInput(reducer.bookingEmail);
       setEmailValid(true);
-      setDateInput(new Date(reducer.bookingDate));
+      // setDateInput(new Date(dt));
+      // setTimeInput(new Date(dt));
       setDateValid(true);
+      setTimeValid(true);
       setPeopleAmountInput(reducer.bookingPeople);
     } else {
       const date = new Date();
-      date.setHours(18);
       setDateInput(date);
       setPeopleAmountInput(2);
     }
   }, []);
+
+  const isWeekday = (value) => {
+    const day = value.getDay();
+    return day !== 0 && day !== 6;
+  };
 
   const handleBackClick = () => {
     window.scrollTo(0, 0);
@@ -62,15 +109,9 @@ function ConfirmDisplay({
 
     const d = new Date(reducer.bookingDate);
 
-    const dateToSend =
-      [d.getDate() + "-" + [d.getMonth() + 1] + "-" + d.getFullYear()].join(
-        "/",
-      ) +
-      " " +
-      d.getHours() +
-      ":" +
-      d.getMinutes() +
-      0;
+    const fullDateTime = `${dateToSend} ${timeInput}`;
+
+    console.log(new Date(fullDateTime));
 
     const postDetails = async (bookId) => {
       await fetch(
@@ -99,7 +140,7 @@ function ConfirmDisplay({
         },
       )
         .then((res) => res.json())
-        .then((data) => {
+        .then(() => {
           setStep(5);
         });
     };
@@ -113,13 +154,14 @@ function ConfirmDisplay({
           Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
         },
         body: JSON.stringify({
-          startTime: dateToSend,
+          startTime: fullDateTime,
           numberOfPeople: reducer.bookingPeople,
           email: reducer.bookingEmail,
         }),
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           postDetails(data.bookingId);
         });
 
@@ -134,7 +176,7 @@ function ConfirmDisplay({
           mode: "no-cors",
         },
         body: JSON.stringify({
-          startTime: dateToSend,
+          startTime: fullDateTime,
           numberOfPeople: peopleAmountInput,
           email: emailInput,
         }),
@@ -166,7 +208,7 @@ function ConfirmDisplay({
         },
       )
         .then((res) => res.json())
-        .then((data) => {
+        .then(() => {
           setStep(5);
         });
     }
@@ -266,25 +308,39 @@ function ConfirmDisplay({
               </ul>
             </div>
           </div>
-          <div className="input-pair">
+          <div className="input-pair mt-1">
             <label htmlFor="confirmEmail">DATE</label>
-            {dateValid ? (
+            <DatePicker
+              selected={dateInput}
+              onChange={(e) => handleDateChange(e)}
+              filterDate={isWeekday}
+              locale="en-gb"
+              dateFormat="dd/MM/yyyy"
+              minDate={new Date()}
+              className="date-picker"
+            />
+          </div>
+          <div className="input-pair mt-1">
+            <label htmlFor="confirmTime">TIME</label>
+            {timeValid === true || timeValid === undefined ? (
               <></>
             ) : (
               <label className="blue-text">
-                Please choose a time where we're open
+                Please select a time we&lsquo;re open!
               </label>
             )}
+            {currentBookingType === "updateBooking" ? (
+              <label className="blue-text" htmlFor="confirmTime">
+                Currently: {reducer.bookingDate.split(" ")[1]}
+              </label>
+            ) : (
+              <></>
+            )}
+            <TimePicker
+              onChange={(e) => handleTimeChange(e)}
+              showSecond={false}
+            />
           </div>
-          <DateTimePicker
-            value={dateInput}
-            minDate={new Date()}
-            onChange={(e) => validateDate(e)}
-            format="dd-MM-y HH:mm"
-            locale="da-dk"
-            maxDetail="minute"
-            required
-          />
           <div className="input-pair mt-1">
             <label htmlFor="peopleAmount">AMOUNT OF PEOPLE</label>
             {peopleAmountValid ? (
@@ -306,37 +362,48 @@ function ConfirmDisplay({
           {currentBookingType === "updateBooking" &&
           emailValid &&
           dateValid &&
+          timeValid &&
           peopleAmountValid ? (
-            <button className="confirm-btn" onClick={() => handleBooking()}>
+            <button
+              type="submit"
+              className="confirm-btn"
+              onClick={() => handleBooking()}
+            >
               UPDATE{" "}
               <span>
-                <i className="fa fa-check"></i>
+                <i className="fa fa-check" />
               </span>
             </button>
           ) : (currentBookingType === "updateBooking" && !emailValid) ||
             !dateValid ||
+            !timeValid ||
             !peopleAmountValid ? (
-            <button className="confirm-btn disabled">
+            <button type="submit" className="confirm-btn disabled">
               UPDATE{" "}
               <span>
-                <i className="fa fa-check"></i>
+                <i className="fa fa-check" />
               </span>
             </button>
           ) : currentBookingType === "newBooking" &&
             emailValid &&
             dateValid &&
+            timeValid &&
             peopleAmountValid ? (
-            <button className="confirm-btn" onClick={() => handleBooking()}>
+            <button
+              type="submit"
+              className="confirm-btn"
+              onClick={() => handleBooking()}
+            >
               CONFIRM{" "}
               <span>
-                <i className="fa fa-check"></i>
+                <i className="fa fa-check" />
               </span>
             </button>
           ) : (
-            <button className="confirm-btn disabled">
+            <button type="submit" className="confirm-btn disabled">
               CONFIRM{" "}
               <span>
-                <i className="fa fa-check"></i>
+                <i className="fa fa-check" />
               </span>
             </button>
           )}
@@ -346,6 +413,7 @@ function ConfirmDisplay({
         <div className="text-left">
           <div className="back-container">
             <button
+              type="submit"
               className="primary-back-btn blue-text"
               onClick={() => handleBackClick()}
             >
@@ -369,6 +437,4 @@ export default connect(mapStateToProps, {
   setEmail,
   setDate,
   setPeopleAmount,
-  setBookingId,
-  clearDish,
 })(ConfirmDisplay);

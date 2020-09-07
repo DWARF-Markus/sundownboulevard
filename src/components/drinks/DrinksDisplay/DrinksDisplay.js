@@ -20,7 +20,16 @@ function DrinksDisplay({
 
   useEffect(() => {
     setLoading(true);
-    const beers = fetch("https://api.punkapi.com/v2/beers")
+    const beers = fetch(
+      "https://krh-sundown.dev.dwarf.dk/api/user/drinks?guestCount=25",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+        },
+      },
+    )
       .then((res) => res.json())
       .then((data) => {
         setUiDrinks(data);
@@ -47,11 +56,11 @@ function DrinksDisplay({
 
   if (loading || processingBooking) {
     return (
-      <div className="confirm-display-wrapper mt-2">
-        <div className="confirm-loading-screen mt-2">
-          <div className="confirm-loader mt-2">
+      <div className="confirm-display-wrapper">
+        <div className="confirm-loading-screen">
+          <div className="confirm-loader">
             <img className="loader-animation" src={image} alt="loading icon" />
-            {setProcessingBooking ? (
+            {processingBooking ? (
               <p className="logo-text blue-text">Processing booking ...</p>
             ) : (
               <p className="logo-text blue-text">Loading drinks ...</p>

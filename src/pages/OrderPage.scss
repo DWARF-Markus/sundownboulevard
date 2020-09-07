@@ -5,8 +5,13 @@
   position: fixed;
   bottom: 0px;
   width: 100%;
+  z-index: 100;
   height: 80px;
   background-color: white;
+}
+
+.min-height {
+  min-height: 100vh !important;
 }
 
 .refresh-btn {
@@ -44,15 +49,14 @@
 .fadein-animation {
   animation-name: fadein;
   animation-duration: 1.2s;
+  min-height: calc(100vh - 260px);
+  display: grid;
+  align-items: center;
 }
 
 .opacity-animation {
   animation-name: opacityIn;
   animation-duration: 0.8s;
-}
-
-.loader-page {
-  min-height: 80vh;
 }
 
 .delete-btn {

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useState, useEffect, useRef } from "react";
 import SliderContent from "./SliderContent";
 import Dots from "./Dots";

@@ -1,9 +1,10 @@
+/* eslint-disable no-shadow */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as EmailValidator from "email-validator";
-import token from "../../../token";
 import { useHistory } from "react-router-dom";
+import token from "../../../token";
 import "./EmailInput.scss";
 import {
   setEmail,
@@ -30,7 +31,7 @@ function EmailInput({
   clearDrinks,
   getDish,
 }) {
-  let history = useHistory();
+  const history = useHistory();
   const [userEmail, setUserEmail] = useState("");
   const [errMessage, setErrMessage] = useState("");
 
@@ -57,14 +58,11 @@ function EmailInput({
           } else {
             if (data[0].dishes.length === 0) {
               getDish();
-              console.log("no dishes has been added yet");
             } else {
-              setDishOnUpdate(data[0].dishes[0]["externalDishId"]);
+              setDishOnUpdate(data[0].dishes[0].externalDishId);
             }
 
-            const drinks = data[0].drinks.map((drink) =>
-              setDrinkOnUpdate(drink.drink_info),
-            );
+            data[0].drinks.map((drink) => setDrinkOnUpdate(drink.drink_info));
 
             setEmail(userEmail);
             setBookingType("updateBooking");
@@ -72,6 +70,7 @@ function EmailInput({
             setDate(data[0].startTime);
             setPeopleAmount(data[0].numberOfPeople);
             setStep(2);
+            window.scrollTo(0, 0);
             history.push("/order");
           }
         });
@@ -92,7 +91,7 @@ function EmailInput({
       <div className="email-input-wrapper mt-1">
         <div className="input-pair">
           <label htmlFor="email-input" className="red-text">
-            {errMessage ? errMessage : " "}
+            {errMessage || " "}
           </label>
           <label htmlFor="email-input">Email</label>
           <input
@@ -103,6 +102,7 @@ function EmailInput({
           />
           <div>
             <button
+              type="submit"
               onClick={() => handleUpdateBookingClick()}
               className="primary-home-btn"
             >

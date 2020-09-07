@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -5,7 +6,7 @@ import { setStep } from "../../../actions/actions";
 import store from "../../../store";
 import "./PrimaryBtn.scss";
 
-function PrimaryBtn({ increment = false, title, icon, navigateTo, setStep }) {
+function PrimaryBtn({ increment = false, title, icon, setStep }) {
   const [navToHome, setNavToHome] = useState(false);
   const [btnIcon, setBtnIcon] = useState(icon);
   const [btnTitle, setBtnTitle] = useState(title);
