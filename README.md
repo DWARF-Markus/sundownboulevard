@@ -5,9 +5,10 @@ Below you'll find information on installation along with a list of specs of this
 ## Installation
 1) Clone repository
 2) Change directory to the root of the project
-3) Run 'npm init' to install all dependencies
+3) Run 'npm install' to install all dependencies
 4) Run 'cp .env.example .env' to create your environment file
-5) Fill out the 'REACT_APP_API_TOKEN : "api token here!"' with a valid token
+5) Fill out the REACT_APP_API_TOKEN in .env with a valid token
+6) Run 'npm run start' to run application as in dev mode / Run 'npm run build' to build the application
 
 
 ## Specs
