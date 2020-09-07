@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-plusplus */
 import React, { useState, useEffect } from "react";
-import Moment from "react-moment";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { setStep } from "../../../actions/actions";
@@ -11,9 +10,7 @@ function ReceiptDisplay({ data, setStep }) {
   const history = useHistory();
 
   const [dish, setDish] = useState("");
-  const [drinks, setDrinks] = useState([]);
   const [email, setEmail] = useState("");
-  const [date, setDate] = useState("");
   const [guests, setGuests] = useState("");
   const [drinksToOutput, setDrinksToOutput] = useState([]);
   const drinksToShow = [];
@@ -21,9 +18,7 @@ function ReceiptDisplay({ data, setStep }) {
   useEffect(() => {
     setDish(data.dish.strMeal);
     setEmail(data.bookingEmail);
-    setDate(new Date(data.bookingDate));
     setGuests(data.bookingPeople);
-    setDrinks(data.drinksName);
 
     function countInArray(arr, id) {
       let count = 0;
@@ -36,7 +31,7 @@ function ReceiptDisplay({ data, setStep }) {
     }
 
     data.drinksName.map((drink) => {
-      drinksToShow.push({
+      return drinksToShow.push({
         id: drink.id,
         count: countInArray(data.drinksName, drink.id),
         name: drink.name,
@@ -61,9 +56,9 @@ function ReceiptDisplay({ data, setStep }) {
           <p>
             {guests}x <span>{dish}</span>
           </p>
-          {drinksToOutput.map((drink, i) => {
+          {drinksToOutput.map((drink) => {
             return (
-              <p key={i}>
+              <p>
                 {drink.count}x <span>{drink.name}</span>
               </p>
             );

@@ -1,35 +1,25 @@
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Drink from "./Drink";
-import token from "../../../token";
 import image from "../../../images/blue-beach.png";
 import "./DrinksDisplay.scss";
 import { setStep } from "../../../actions/actions";
 
-function DrinksDisplay({
-  reducer,
-  setStep,
-  drinksAmount,
-  id,
-  drinks,
-  bookingPeople,
-}) {
+function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
   const [uiDrinks, setUiDrinks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingBooking, setProcessingBooking] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    const beers = fetch(
-      "https://krh-sundown.dev.dwarf.dk/api/user/drinks?guestCount=25",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-        },
+    fetch("https://krh-sundown.dev.dwarf.dk/api/user/drinks?guestCount=25", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
       },
-    )
+    })
       .then((res) => res.json())
       .then((data) => {
         setUiDrinks(data);
@@ -74,13 +64,12 @@ function DrinksDisplay({
   return (
     <>
       <div className="drinks-container">
-        {uiDrinks.map((UIdrink, i) => {
+        {uiDrinks.map((UIdrink) => {
           return (
             <Drink
               drinksAmount={drinksAmount}
               bookingPeople={bookingPeople}
               selected={reducer.drinks}
-              key={i}
               drink={UIdrink}
             />
           );
@@ -90,6 +79,7 @@ function DrinksDisplay({
         <div className="text-left">
           <div className="back-container">
             <button
+              type="submit"
               className="primary-back-btn blue-text"
               onClick={() => handleBackClick()}
             >
@@ -102,9 +92,15 @@ function DrinksDisplay({
         <p className="logo-text text-center blue-text">{drinksAmount} chosen</p>
         <div className="text-right">
           {drinksAmount === 0 ? (
-            <button className="disabled-btn">CHOOSE MIN 1 DRINK</button>
+            <button type="submit" className="disabled-btn">
+              CHOOSE MIN 1 DRINK
+            </button>
           ) : (
-            <button className="primary-btn" onClick={() => handleDrinkSubmit()}>
+            <button
+              type="submit"
+              className="primary-btn"
+              onClick={() => handleDrinkSubmit()}
+            >
               CONFIRM
               <i className="fa fa-caret-right"> </i>
             </button>

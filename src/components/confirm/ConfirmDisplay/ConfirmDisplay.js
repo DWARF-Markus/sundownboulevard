@@ -65,7 +65,7 @@ function ConfirmDisplay({
   const handleTimeChange = (value) => {
     const selectedHour = new Date(value).getHours();
 
-    if (selectedHour >= 18 && selectedHour < 23) {
+    if (selectedHour >= 18 && selectedHour < 20) {
       setTimeInput(value.format("HH:mm"));
       setTimeValid(true);
       setDate(`${dateToSend} ${value.format("HH:mm")}`);
@@ -106,8 +106,6 @@ function ConfirmDisplay({
     setLoading(true);
 
     const fullDateTime = `${dateToSend} ${timeInput}`;
-
-    console.log(new Date(fullDateTime));
 
     const postDetails = async (bookId) => {
       await fetch(
@@ -282,11 +280,11 @@ function ConfirmDisplay({
                 <li>SUNDAY</li>
               </ul>
               <ul className="right">
-                <li>16:00 - 23:00</li>
-                <li>16:00 - 23:00</li>
-                <li>16:00 - 23:00</li>
-                <li>16:00 - 23:00</li>
-                <li>16:00 - 23:00</li>
+                <li>18:00 - 20:00</li>
+                <li>18:00 - 20:00</li>
+                <li>18:00 - 20:00</li>
+                <li>18:00 - 20:00</li>
+                <li>18:00 - 20:00</li>
                 <li>CLOSED</li>
                 <li>CLOSED</li>
               </ul>
