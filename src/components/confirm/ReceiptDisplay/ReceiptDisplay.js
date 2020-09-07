@@ -75,10 +75,7 @@ function ReceiptDisplay({ data, setStep }) {
             Email <span>{email}</span>
           </p>
           <p>
-            Date and time{" "}
-            <span>
-              <Moment format="MM/DD/YYYY HH:mm">{data.bookingDate}</Moment>
-            </span>
+            Date and time <span>{data.bookingDate}</span>
           </p>
           <p>
             Guests <span>{guests}</span>

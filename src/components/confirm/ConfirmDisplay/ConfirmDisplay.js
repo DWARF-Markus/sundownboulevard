@@ -40,7 +40,7 @@ function ConfirmDisplay({
   const [dateValid, setDateValid] = useState(true);
 
   const [timeInput, setTimeInput] = useState(new Date());
-  const [timeValid, setTimeValid] = useState(undefined);
+  const [timeValid, setTimeValid] = useState(false);
 
   const [peopleAmountInput, setPeopleAmountInput] = useState("");
   const [peopleAmountValid, setPeopleAmountValid] = useState(true);
@@ -81,10 +81,8 @@ function ConfirmDisplay({
 
       setEmailInput(reducer.bookingEmail);
       setEmailValid(true);
-      // setDateInput(new Date(dt));
-      // setTimeInput(new Date(dt));
       setDateValid(true);
-      setTimeValid(true);
+      setTimeValid(false);
       setPeopleAmountInput(reducer.bookingPeople);
     } else {
       const date = new Date();
@@ -106,8 +104,6 @@ function ConfirmDisplay({
   const handleBooking = async () => {
     window.scrollTo(0, 0);
     setLoading(true);
-
-    const d = new Date(reducer.bookingDate);
 
     const fullDateTime = `${dateToSend} ${timeInput}`;
 
@@ -161,7 +157,6 @@ function ConfirmDisplay({
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           postDetails(data.bookingId);
         });
 
@@ -211,17 +206,6 @@ function ConfirmDisplay({
         .then(() => {
           setStep(5);
         });
-    }
-  };
-
-  const validateDate = (input) => {
-    const hours = input.getHours();
-    if (hours < 18 || hours > 23) {
-      setDateValid(false);
-    } else {
-      setDateInput(input);
-      setDateValid(true);
-      setDate(input);
     }
   };
 
@@ -326,7 +310,7 @@ function ConfirmDisplay({
               <></>
             ) : (
               <label className="blue-text">
-                Please select a time we&lsquo;re open!
+                Please confirm time for visiting
               </label>
             )}
             {currentBookingType === "updateBooking" ? (
@@ -374,10 +358,7 @@ function ConfirmDisplay({
                 <i className="fa fa-check" />
               </span>
             </button>
-          ) : (currentBookingType === "updateBooking" && !emailValid) ||
-            !dateValid ||
-            !timeValid ||
-            !peopleAmountValid ? (
+          ) : currentBookingType === "updateBooking" && !timeValid ? (
             <button type="submit" className="confirm-btn disabled">
               UPDATE{" "}
               <span>
