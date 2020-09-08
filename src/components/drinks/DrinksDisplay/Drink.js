@@ -3,10 +3,9 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable radix */
 /* eslint-disable no-shadow */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import { setDrink, removeDrink } from "../../../actions/actions";
-import loader from "../../../images/blue-beach.png";
 import "./Drink.scss";
 
 function Drink({ drink, setDrink, removeDrink, selected }) {
@@ -25,28 +24,33 @@ function Drink({ drink, setDrink, removeDrink, selected }) {
     });
   }, []);
 
-  const imageLoading = () => {
+  const imageLoading = useCallback(() => {
     setDoneLoading(true);
-  };
+  }, [doneLoading]);
 
-  const handleDrinkSelect = (id, name) => {
-    setDrink(id, name);
-    if (isSelected) {
-      setAmount(parseInt(amount) + 1);
-    } else {
-      setIsSelected(true);
-      setAmount(1);
-    }
-    // }
-  };
+  const handleDrinkSelect = useCallback(
+    (id, name) => {
+      setDrink(id, name);
+      if (isSelected) {
+        setAmount(parseInt(amount) + 1);
+      } else {
+        setIsSelected(true);
+        setAmount(1);
+      }
+    },
+    [amount],
+  );
 
-  const handleDrinksRemove = (id) => {
-    if (isSelected) {
-      removeDrink(id);
-      setIsSelected(false);
-      setAmount(0);
-    }
-  };
+  const handleDrinksRemove = useCallback(
+    (id) => {
+      if (isSelected) {
+        removeDrink(id);
+        setIsSelected(false);
+        setAmount(0);
+      }
+    },
+    [isSelected],
+  );
 
   return (
     <div className={isSelected ? "drink-entry selected" : "drink-entry"}>

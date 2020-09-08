@@ -1,11 +1,14 @@
+/* eslint-disable no-shadow */
+/* eslint-disable radix */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from "react";
-import { setStep } from "../../../actions/actions";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
+import { setStep } from "../../../actions/actions";
 import store from "../../../store";
 import BackBtn from "./BackBtn";
 import data from "./timeline-banner.json";
@@ -27,8 +30,6 @@ function TimelineBanner({ step, setStep }) {
   };
 
   const handleTimelineClick = (e) => {
-    console.log(e);
-    console.log(parseInt(e));
     if (parseInt(e) === 1 || parseInt(e) === 5) {
       // wrong error
     } else {
@@ -61,7 +62,7 @@ function TimelineBanner({ step, setStep }) {
           onClick={() => handleHomeClick()}
           role="button"
         >
-          <BackBtn color="white-text" title="HOME" />
+          <BackBtn navigateTo="/" color="white-text" title="HOME" />
         </div>
         <h4
           className={
@@ -83,6 +84,7 @@ function TimelineBanner({ step, setStep }) {
               {data.map((currStep, i) => {
                 return (
                   <div
+                    key={i}
                     className={
                       currStep.step === currentStep
                         ? "timeline-entry active"
@@ -92,6 +94,7 @@ function TimelineBanner({ step, setStep }) {
                     }
                   >
                     <div
+                      role="button"
                       className="icon"
                       onClick={() => handleTimelineClick(currStep.step)}
                     >

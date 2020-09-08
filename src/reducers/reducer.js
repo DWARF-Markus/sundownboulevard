@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import {
   SET_LOADING,
   SET_EMAIL,

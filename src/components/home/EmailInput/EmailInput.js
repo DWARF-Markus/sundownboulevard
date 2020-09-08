@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as EmailValidator from "email-validator";
 import { useHistory } from "react-router-dom";
-import token from "../../../token";
 import "./EmailInput.scss";
 import {
   setEmail,
@@ -47,7 +46,7 @@ function EmailInput({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: token,
+            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           },
         },
       )

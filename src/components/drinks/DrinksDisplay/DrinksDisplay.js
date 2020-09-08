@@ -1,5 +1,6 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-shadow */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import Drink from "./Drink";
 import image from "../../../images/blue-beach.png";
@@ -13,7 +14,7 @@ function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch("https://krh-sundown.dev.dwarf.dk/api/user/drinks?guestCount=25", {
+    fetch("https://krh-sundown.dev.dwarf.dk/api/user/all_drinks ", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,12 +30,12 @@ function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
       });
   }, []);
 
-  const handleBackClick = () => {
+  const handleBackClick = useCallback(() => {
     setStep(2);
     window.scrollTo(0, 0);
-  };
+  }, []);
 
-  const handleDrinkSubmit = () => {
+  const handleDrinkSubmit = useCallback(() => {
     window.scrollTo(0, 0);
     setProcessingBooking(true);
 
@@ -42,7 +43,7 @@ function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
       setProcessingBooking(false);
       setStep(4);
     }, 800);
-  };
+  }, []);
 
   if (loading || processingBooking) {
     return (
@@ -64,12 +65,13 @@ function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
   return (
     <>
       <div className="drinks-container">
-        {uiDrinks.map((UIdrink) => {
+        {uiDrinks.map((UIdrink, i) => {
           return (
             <Drink
               drinksAmount={drinksAmount}
               bookingPeople={bookingPeople}
               selected={reducer.drinks}
+              key={i}
               drink={UIdrink}
             />
           );

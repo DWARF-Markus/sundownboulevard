@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-shadow */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -55,7 +55,7 @@ function OrderPage({
     history.push("/");
   };
 
-  const setPage = () => {
+  const setPage = useCallback(() => {
     if (currentStep === 2)
       return (
         <DishDisplay
@@ -84,7 +84,7 @@ function OrderPage({
       );
     if (currentStep === 5)
       return <ReceiptDisplay data={store.getState().reducer} />;
-  };
+  }, [currentStep, loading, drinksAmount]);
 
   const currentPage = setPage(currentStep);
 
@@ -107,7 +107,6 @@ function OrderPage({
       setCurrentBookingType(bookingType);
     });
     return unsubscribe;
-    console.log("triggered");
   });
 
   useEffect(() => {

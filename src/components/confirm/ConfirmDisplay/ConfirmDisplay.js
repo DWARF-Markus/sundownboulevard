@@ -2,7 +2,7 @@
 /* eslint-disable radix */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-shadow */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import "moment/locale/en-gb";
 import moment from "moment";
@@ -50,29 +50,35 @@ function ConfirmDisplay({
 
   registerLocale("en-gb", enGb);
 
-  const handleDateChange = (value) => {
-    const newDate = new Date(value);
+  const handleDateChange = useCallback(
+    (value) => {
+      const newDate = new Date(value);
 
-    const formattedDate = `${newDate.getDate()}-${
-      newDate.getMonth() + 1
-    }-${newDate.getFullYear()}`;
+      const formattedDate = `${newDate.getDate()}-${
+        newDate.getMonth() + 1
+      }-${newDate.getFullYear()}`;
 
-    setDateInput(newDate);
-    setDateToSend(formattedDate);
-    setDate(`${formattedDate} ${timeInput}`);
-  };
+      setDateInput(newDate);
+      setDateToSend(formattedDate);
+      setDate(`${formattedDate} ${timeInput}`);
+    },
+    [dateToSend, timeInput],
+  );
 
-  const handleTimeChange = (value) => {
-    const selectedHour = new Date(value).getHours();
+  const handleTimeChange = useCallback(
+    (value) => {
+      const selectedHour = new Date(value).getHours();
 
-    if (selectedHour >= 18 && selectedHour < 20) {
-      setTimeInput(value.format("HH:mm"));
-      setTimeValid(true);
-      setDate(`${dateToSend} ${value.format("HH:mm")}`);
-    } else {
-      setTimeValid(false);
-    }
-  };
+      if (selectedHour >= 18 && selectedHour < 20) {
+        setTimeInput(value.format("HH:mm"));
+        setTimeValid(true);
+        setDate(`${dateToSend} ${value.format("HH:mm")}`);
+      } else {
+        setTimeValid(false);
+      }
+    },
+    [dateToSend, timeInput],
+  );
 
   useEffect(() => {
     if (currentBookingType === "updateBooking") {
@@ -91,15 +97,15 @@ function ConfirmDisplay({
     }
   }, []);
 
-  const isWeekday = (value) => {
+  const isWeekday = useCallback((value) => {
     const day = value.getDay();
     return day !== 0 && day !== 6;
-  };
+  }, []);
 
-  const handleBackClick = () => {
+  const handleBackClick = useCallback(() => {
     window.scrollTo(0, 0);
     setStep(3);
-  };
+  }, []);
 
   const handleBooking = async () => {
     window.scrollTo(0, 0);
@@ -207,7 +213,7 @@ function ConfirmDisplay({
     }
   };
 
-  const validatePeopleAmount = (amount) => {
+  const validatePeopleAmount = useCallback((amount) => {
     if (amount.value > 0 && amount.value <= 10) {
       setPeopleAmount(amount.value);
       setPeopleAmountValid(true);
@@ -215,9 +221,9 @@ function ConfirmDisplay({
     } else {
       setPeopleAmountValid(false);
     }
-  };
+  }, []);
 
-  const handleEmail = (email) => {
+  const handleEmail = useCallback((email) => {
     const isMailValid = EmailValidator.validate(email);
     if (isMailValid) {
       setEmailInput(email);
@@ -227,7 +233,7 @@ function ConfirmDisplay({
       setEmailInput(email);
       setEmailValid(false);
     }
-  };
+  }, []);
 
   if (loading) {
     return (

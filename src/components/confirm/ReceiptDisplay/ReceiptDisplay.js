@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-plusplus */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { setStep } from "../../../actions/actions";
@@ -15,20 +15,20 @@ function ReceiptDisplay({ data, setStep }) {
   const [drinksToOutput, setDrinksToOutput] = useState([]);
   const drinksToShow = [];
 
+  const countInArray = useCallback((arr, id) => {
+    let count = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (data.drinks[i] === id) {
+        count++;
+      }
+    }
+    return count;
+  }, []);
+
   useEffect(() => {
     setDish(data.dish.strMeal);
     setEmail(data.bookingEmail);
     setGuests(data.bookingPeople);
-
-    function countInArray(arr, id) {
-      let count = 0;
-      for (let i = 0; i < arr.length; i++) {
-        if (data.drinks[i] === id) {
-          count++;
-        }
-      }
-      return count;
-    }
 
     data.drinksName.map((drink) => {
       return drinksToShow.push({
@@ -43,10 +43,10 @@ function ReceiptDisplay({ data, setStep }) {
     ]);
   }, [data]);
 
-  const handleHomeBtn = () => {
+  const handleHomeBtn = useCallback(() => {
     setStep(2);
     history.push("/");
-  };
+  }, []);
 
   return (
     <div className="receipt-container">

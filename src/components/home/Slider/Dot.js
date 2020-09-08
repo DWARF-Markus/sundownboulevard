@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import "./Dot.scss";
 
-function Dot({ active }) {
-  const dotColor = {
-    background: `${active ? "#ba2329" : "white"}`,
+function Dot({ id, active, onPassIndex }) {
+  const dotColor = useMemo(
+    () => ({
+      background: `${active ? "#ba2329" : "white"}`,
+    }),
+    [active],
+  );
+
+  const handleDotClick = (e) => {
+    onPassIndex(e);
   };
 
   return (
-    <span className="dot" style={dotColor}>
+    <span onClick={() => handleDotClick(id)} className="dot" style={dotColor}>
       {" "}
     </span>
   );

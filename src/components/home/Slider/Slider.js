@@ -1,5 +1,11 @@
 /* eslint-disable consistent-return */
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import SliderContent from "./SliderContent";
 import Dots from "./Dots";
 import "./Slider.scss";
@@ -7,7 +13,10 @@ import "./Slider.scss";
 function Slider({ slides, autoPlay }) {
   const autoplayRef = useRef();
 
-  const getWidth = () => (window.innerWidth > 1220 ? 1220 : window.innerWidth);
+  const getWidth = useCallback(
+    () => (window.innerWidth > 1220 ? 1220 : window.innerWidth),
+    [window.innerWidth],
+  );
 
   const [state, setState] = useState({
     activeIndex: 0,
@@ -18,7 +27,7 @@ function Slider({ slides, autoPlay }) {
 
   const { translate, transition, activeIndex } = state;
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     if (activeIndex === slides.length - 1) {
       return setState({
         ...state,
@@ -31,11 +40,22 @@ function Slider({ slides, autoPlay }) {
       activeIndex: activeIndex + 1,
       translate: (activeIndex + 1) * getWidth(),
     });
-  };
+  }, [activeIndex]);
+
+  const handlePassIndex = useCallback(
+    (e) => {
+      setState({
+        ...state,
+        activeIndex: e,
+        translate: e * getWidth(),
+      });
+    },
+    [activeIndex],
+  );
 
   useEffect(() => {
     autoplayRef.current = nextSlide;
-  });
+  }, [activeIndex]);
 
   useEffect(() => {
     const play = () => {
@@ -59,7 +79,11 @@ function Slider({ slides, autoPlay }) {
         {" "}
       </SliderContent>
 
-      <Dots slides={slides} activeIndex={activeIndex} />
+      <Dots
+        onPassIndex={handlePassIndex}
+        slides={slides}
+        activeIndex={activeIndex}
+      />
     </div>
   );
 }

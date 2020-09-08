@@ -1,7 +1,8 @@
+/* eslint-disable no-shadow */
 import React from "react";
 import { connect } from "react-redux";
-import { setStep } from "../../../actions/actions";
 import { Link } from "react-router-dom";
+import { setStep } from "../../../actions/actions";
 import "./BackBtn.scss";
 
 function BackBtn({ color, title, navigateTo, setStep }) {
@@ -10,7 +11,7 @@ function BackBtn({ color, title, navigateTo, setStep }) {
   };
 
   return (
-    <div className="back-btn" onClick={() => handleStep()}>
+    <div role="button" className="back-btn" onClick={() => handleStep()}>
       <Link to={navigateTo} className={color}>
         <span>
           <i className="fa fa-home"> </i>

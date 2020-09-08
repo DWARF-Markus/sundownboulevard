@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { getDish, setStep } from "../../../actions/actions";
@@ -7,15 +7,15 @@ import "./DishDisplay.scss";
 function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
   let history = useHistory();
 
-  const handleDishSubmit = async () => {
+  const handleDishSubmit = useCallback(async () => {
     window.scrollTo(0, 0);
     setStep(3);
-  };
+  }, [getDish]);
 
-  const handleBackClick = () => {
+  const handleBackClick = useCallback(() => {
     window.scrollTo(0, 0);
     history.push("/");
-  };
+  }, []);
 
   return (
     <>
@@ -34,13 +34,14 @@ function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
           </button>
         </div>
         <div className="dish-display-img p-1">
-          <img src={dish.strMealThumb} alt="Dish Image" />
+          <img src={dish.strMealThumb} alt="image of meal" />
         </div>
       </div>
       <div className="btn-container px-1">
         <div className="text-left">
           <div className="back-container">
             <button
+              type="submit"
               className="primary-back-btn blue-text"
               onClick={() => handleBackClick()}
             >
@@ -53,6 +54,7 @@ function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
         <div> </div>
         <div className="text-right">
           <button
+            type="submit"
             className="primary-btn blue"
             onClick={() => handleDishSubmit()}
           >

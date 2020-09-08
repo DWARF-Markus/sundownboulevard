@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import React from "react";
+import React, { useCallback } from "react";
 import "./HomePage.scss";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
@@ -18,12 +18,12 @@ function HomePage({ setStep, setBookingType }) {
   const history = useHistory();
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
 
-  const handleNewBookClick = () => {
+  const handleNewBookClick = useCallback(() => {
     setBookingType("newBooking");
     setStep(2);
     window.scrollTo(0, 0);
     history.push("/order");
-  };
+  }, []);
 
   return (
     <div className="page-wrapper pt-70">
