@@ -10,7 +10,12 @@ function Dots({ slides, activeIndex, onPassIndex }) {
   return (
     <div className="dots-container">
       {slides.map((slide, i) => (
-        <Dot onPassIndex={handlePassIndex} id={i} active={activeIndex === i} />
+        <Dot
+          key={i}
+          onPassIndex={handlePassIndex}
+          id={i}
+          active={activeIndex === i}
+        />
       ))}
     </div>
   );

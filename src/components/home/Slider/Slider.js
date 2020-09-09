@@ -1,11 +1,5 @@
 /* eslint-disable consistent-return */
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import SliderContent from "./SliderContent";
 import Dots from "./Dots";
 import "./Slider.scss";

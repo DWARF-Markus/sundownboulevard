@@ -84,7 +84,7 @@ function OrderPage({
       );
     if (currentStep === 5)
       return <ReceiptDisplay data={store.getState().reducer} />;
-  }, [currentStep, loading, drinksAmount]);
+  }, [currentStep, loading, drinksAmount, currentDish]);
 
   const currentPage = setPage(currentStep);
 
