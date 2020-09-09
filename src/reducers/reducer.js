@@ -13,7 +13,7 @@ import {
   SET_DISH_BY_ID,
   SET_BOOKING_ID,
   SET_BOOKING_TYPE,
-  REMOVE_DRINK,
+  DECREASE_DRINK,
   GET_DISH,
   GET_DISH_ERR,
 } from "../actions/types";
@@ -75,14 +75,18 @@ export default (state = initialState, action) => {
         ...state,
         dish: action.payload,
       };
-    case REMOVE_DRINK:
+    case DECREASE_DRINK:
+      const index = state.drinks.indexOf(action.payload.id);
       return {
         ...state,
         drinks: [
-          ...state.drinks.filter((drink) => drink !== action.payload.id),
+          ...state.drinks.slice(0, index),
+          ...state.drinks.slice(index + 1),
         ],
         drinksName: [
-          ...state.drinksName.filter((drink) => drink.id !== action.payload.id),
+          // ...state.drinksName.filter((drink) => drink.id !== action.payload.id),
+          ...state.drinksName.slice(0, index),
+          ...state.drinksName.slice(index + 1),
         ],
       };
     case SET_DATE:

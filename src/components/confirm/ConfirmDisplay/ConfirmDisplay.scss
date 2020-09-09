@@ -62,6 +62,16 @@
   pointer-events: none;
 }
 
+.rc-time-picker-panel-inner {
+  width: 46vw !important;
+  left: 2px;
+  top: 3px;
+}
+
+.rc-time-picker-panel-select {
+  width: 50% !important;
+}
+
 .confirm-btn {
   padding: 18px 45px;
   background-color: #007ddb;
@@ -138,13 +148,23 @@
 .rc-time-picker-input {
   text-align: center;
   font-size: 18px;
-  padding: 10px;
+  padding: 15.5px !important;
+  margin: 0 2px;
   color: #007ddb !important;
 }
 
 .rc-time-picker-input:focus {
   color: white !important;
   background-color: #007ddb;
+}
+
+.confirm-container {
+  min-height: 1.5rem;
+}
+
+.datetime-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 @keyframes spin {
@@ -166,5 +186,9 @@
   .confirm-display-wrapper {
     padding: 30px 0;
     min-height: 0px !important;
+  }
+
+  .rc-time-picker-panel-inner {
+    width: 204% !important;
   }
 }

@@ -5,17 +5,16 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import { setDrink, removeDrink } from "../../../actions/actions";
+import { setDrink, decreaseDrink } from "../../../actions/actions";
 import "./Drink.scss";
 
-function Drink({ drink, setDrink, removeDrink, selected }) {
+function Drink({ drink, setDrink, decreaseDrink, selected }) {
   const [isSelected, setIsSelected] = useState(false);
   const [amount, setAmount] = useState(0);
   const [doneLoading, setDoneLoading] = useState(false);
 
   useEffect(() => {
     const alreadySelected = selected;
-
     alreadySelected.map((entry) => {
       if (parseInt(entry) === parseInt(drink.id)) {
         setIsSelected(true);
@@ -41,15 +40,18 @@ function Drink({ drink, setDrink, removeDrink, selected }) {
     [amount],
   );
 
-  const handleDrinksRemove = useCallback(
+  const handleDrinksDecrease = useCallback(
     (id) => {
-      if (isSelected) {
-        removeDrink(id);
+      decreaseDrink(id);
+      setAmount((prev) => prev - 1);
+
+      const isThisLastEntry = amount === 1;
+
+      if (isThisLastEntry) {
         setIsSelected(false);
-        setAmount(0);
       }
     },
-    [isSelected],
+    [isSelected, amount],
   );
 
   return (
@@ -61,31 +63,27 @@ function Drink({ drink, setDrink, removeDrink, selected }) {
             : "drink-selected-container hidden"
         }
       >
-        <div
-          role="button"
-          className="drink-selected-remove"
-          onClick={() => handleDrinksRemove(drink)}
-        >
-          <i className="fa fa-times red-text"> </i>
-        </div>
         <div className="drink-selected-amount">
-          <span>{amount >= 0 ? amount : ""}</span>
+          <span
+            className="remove-btn"
+            onClick={() => handleDrinksDecrease(drink)}
+          >
+            -
+          </span>
+
+          <span className="amount-display">{amount >= 0 ? amount : ""}</span>
+
+          <span className="add-btn" onClick={() => handleDrinkSelect(drink)}>
+            +
+          </span>
         </div>
       </div>
-      <div
-        role="button"
-        className="drink-image"
-        onClick={() => handleDrinkSelect(drink)}
-      >
+      <div role="button" className="drink-image">
         <div className={doneLoading ? "loading-image" : "loading-image hidden"}>
           <img onLoad={() => imageLoading()} src={drink.image_url} alt="beer" />
         </div>
       </div>
-      <div
-        role="button"
-        className="drink-desc"
-        onClick={() => handleDrinkSelect(drink)}
-      >
+      <div role="button" className="drink-desc">
         <h3>{drink.name}</h3>
         <p>{drink.description}</p>
         <p className="logo-text blue-text mt-1">{drink.abv}%</p>
@@ -94,4 +92,4 @@ function Drink({ drink, setDrink, removeDrink, selected }) {
   );
 }
 
-export default connect(null, { setDrink, removeDrink })(Drink);
+export default connect(null, { setDrink, decreaseDrink })(Drink);

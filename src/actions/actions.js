@@ -5,7 +5,7 @@ import {
   SET_DATE,
   SET_STEP,
   SET_BOOKING_ID,
-  REMOVE_DRINK,
+  DECREASE_DRINK,
   SET_DRINK,
   SET_DRINK_UPDATE,
   CLEAR_DRINKS,
@@ -75,9 +75,9 @@ export const clearDish = () => {
   };
 };
 
-export const removeDrink = (drink) => {
+export const decreaseDrink = (drink) => {
   return {
-    type: REMOVE_DRINK,
+    type: DECREASE_DRINK,
     payload: drink,
   };
 };

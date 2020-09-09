@@ -27,7 +27,6 @@ function ConfirmDisplay({
   setEmail,
   setDate,
   setPeopleAmount,
-
   drinks,
   dish,
   reducer,
@@ -39,7 +38,7 @@ function ConfirmDisplay({
   const [dateInput, setDateInput] = useState("");
   const [dateValid, setDateValid] = useState(true);
 
-  const [timeInput, setTimeInput] = useState(new Date());
+  const [timeInput, setTimeInput] = useState(moment());
   const [timeValid, setTimeValid] = useState(false);
 
   const [peopleAmountInput, setPeopleAmountInput] = useState("");
@@ -47,6 +46,7 @@ function ConfirmDisplay({
   const [loading, setLoading] = useState(false);
 
   const [dateToSend, setDateToSend] = useState("");
+  const [timeToSend, setTimeToSend] = useState("");
 
   registerLocale("en-gb", enGb);
 
@@ -60,40 +60,50 @@ function ConfirmDisplay({
 
       setDateInput(newDate);
       setDateToSend(formattedDate);
-      setDate(`${formattedDate} ${timeInput}`);
+      setDate(`${formattedDate} ${moment(timeInput).format("HH:mm")}`);
     },
     [dateToSend, timeInput],
   );
 
   const handleTimeChange = useCallback(
     (value) => {
+      // console.log(dateToSend);
+      // console.log(value.format("HH:mm"));
+
       const selectedHour = new Date(value).getHours();
 
       if (selectedHour >= 18 && selectedHour < 20) {
-        setTimeInput(value.format("HH:mm"));
+        setTimeInput(value);
+        setTimeToSend(value.format("HH:mm"));
         setTimeValid(true);
-        setDate(`${dateToSend} ${value.format("HH:mm")}`);
+        setDate(`${dateToSend} ${moment(value).format("HH:mm")}`);
       } else {
         setTimeValid(false);
       }
     },
-    [dateToSend, timeInput],
+    [dateToSend, timeInput, dateInput, setDate],
   );
 
   useEffect(() => {
     if (currentBookingType === "updateBooking") {
-      handleDateChange(reducer.bookingDate);
-      handleTimeChange(moment(reducer.bookingDate));
+      const selectedDateTime = new Date(reducer.bookingDate);
+
+      setTimeInput(moment(reducer.bookingDate));
+      setDateInput(selectedDateTime);
 
       setEmailInput(reducer.bookingEmail);
       setEmailValid(true);
       setDateValid(true);
-      setTimeValid(false);
+      setTimeValid(true);
       setPeopleAmountInput(reducer.bookingPeople);
+      setDateToSend(moment(reducer.bookingDate).format("DD-MM-YYYY"));
+      setTimeToSend(moment(reducer.bookingDate).format("HH:mm"));
     } else {
       const date = new Date();
       setDateInput(date);
       setPeopleAmountInput(2);
+      setDateToSend(moment(date).format("DD-MM-YYYY"));
+      setTimeToSend(moment().format("HH:mm"));
     }
   }, []);
 
@@ -111,7 +121,7 @@ function ConfirmDisplay({
     window.scrollTo(0, 0);
     setLoading(true);
 
-    const fullDateTime = `${dateToSend} ${timeInput}`;
+    const fullDateTime = `${dateToSend} ${timeToSend}`;
 
     const postDetails = async (bookId) => {
       await fetch(
@@ -274,7 +284,7 @@ function ConfirmDisplay({
             />
           </div>
           <div className="hours-container mt-1">
-            <p className="hours-title px-1">OPENING HOURS ARE</p>
+            <p className="hours-title">OPENING HOURS ARE</p>
             <div className="hours-wrapper p-1">
               <ul className="left">
                 <li>MONDAY</li>
@@ -296,38 +306,36 @@ function ConfirmDisplay({
               </ul>
             </div>
           </div>
-          <div className="input-pair mt-1">
-            <label htmlFor="confirmEmail">DATE</label>
-            <DatePicker
-              selected={dateInput}
-              onChange={(e) => handleDateChange(e)}
-              filterDate={isWeekday}
-              locale="en-gb"
-              dateFormat="dd/MM/yyyy"
-              minDate={new Date()}
-              className="date-picker"
-            />
-          </div>
-          <div className="input-pair mt-1">
-            <label htmlFor="confirmTime">TIME</label>
+          <div class="input-pair confirm-container">
             {timeValid === true || timeValid === undefined ? (
               <></>
             ) : (
               <label className="blue-text">
-                Please confirm time for visiting
+                Please select a valid time for visiting
               </label>
             )}
-            {currentBookingType === "updateBooking" ? (
-              <label className="blue-text" htmlFor="confirmTime">
-                Currently: {reducer.bookingDate.split(" ")[1]}
-              </label>
-            ) : (
-              <></>
-            )}
-            <TimePicker
-              onChange={(e) => handleTimeChange(e)}
-              showSecond={false}
-            />
+          </div>
+          <div class="datetime-container">
+            <div className="input-pair mt-1">
+              <label htmlFor="confirmEmail">DATE</label>
+              <DatePicker
+                selected={dateInput}
+                onChange={(e) => handleDateChange(e)}
+                filterDate={isWeekday}
+                locale="en-gb"
+                dateFormat="dd/MM/yyyy"
+                minDate={new Date()}
+                className="date-picker"
+              />
+            </div>
+            <div className="input-pair mt-1">
+              <label htmlFor="confirmTime">TIME</label>
+              <TimePicker
+                value={timeInput}
+                onChange={(e) => handleTimeChange(e)}
+                showSecond={false}
+              />
+            </div>
           </div>
           <div className="input-pair mt-1">
             <label htmlFor="peopleAmount">AMOUNT OF PEOPLE</label>
