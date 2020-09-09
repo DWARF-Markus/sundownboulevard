@@ -158,6 +158,11 @@
   background-color: #007ddb;
 }
 
+.rc-time-picker-clear-icon {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .confirm-container {
   min-height: 1.5rem;
 }
