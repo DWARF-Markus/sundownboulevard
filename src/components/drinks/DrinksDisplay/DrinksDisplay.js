@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import Drink from "./Drink";
 import image from "../../../images/blue-beach.png";
@@ -8,11 +9,13 @@ import "./DrinksDisplay.scss";
 import { setStep } from "../../../actions/actions";
 
 function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
+  let history = useHistory();
   const [uiDrinks, setUiDrinks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingBooking, setProcessingBooking] = useState(false);
 
   useEffect(() => {
+    setStep(3);
     setLoading(true);
     fetch("https://krh-sundown.dev.dwarf.dk/api/user/all_drinks ", {
       method: "GET",
@@ -32,6 +35,7 @@ function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
 
   const handleBackClick = useCallback(() => {
     setStep(2);
+    history.push("/order/dish");
     window.scrollTo(0, 0);
   }, []);
 
@@ -42,6 +46,7 @@ function DrinksDisplay({ reducer, setStep, drinksAmount, bookingPeople }) {
     setTimeout(() => {
       setProcessingBooking(false);
       setStep(4);
+      history.push("/order/confirm");
     }, 800);
   }, []);
 

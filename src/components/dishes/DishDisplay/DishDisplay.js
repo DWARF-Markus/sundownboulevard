@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { getDish, setStep } from "../../../actions/actions";
@@ -7,9 +7,14 @@ import "./DishDisplay.scss";
 function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
   let history = useHistory();
 
+  useEffect(() => {
+    setStep(2);
+  }, []);
+
   const handleDishSubmit = useCallback(async () => {
     window.scrollTo(0, 0);
     setStep(3);
+    history.push("/order/drinks");
   }, [getDish]);
 
   const handleBackClick = useCallback(() => {

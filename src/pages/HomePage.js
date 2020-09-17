@@ -22,7 +22,7 @@ function HomePage({ setStep, setBookingType }) {
     setBookingType("newBooking");
     setStep(2);
     window.scrollTo(0, 0);
-    history.push("/order");
+    history.push("/order/dish");
   }, []);
 
   return (

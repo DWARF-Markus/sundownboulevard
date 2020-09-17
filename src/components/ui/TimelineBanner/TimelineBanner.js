@@ -29,11 +29,12 @@ function TimelineBanner({ step, setStep }) {
     history.push("/");
   };
 
-  const handleTimelineClick = (e) => {
+  const handleTimelineClick = (e, url) => {
     if (parseInt(e) === 1 || parseInt(e) === 5) {
       // wrong error
     } else {
       setStep(e);
+      history.push(url);
       window.scrollTo(0, 0);
     }
   };
@@ -55,7 +56,13 @@ function TimelineBanner({ step, setStep }) {
   }, [step]);
 
   return (
-    <div className="timeline-banner-container">
+    <div
+      className={
+        step === 5
+          ? "timeline-banner-container disabled"
+          : "timeline-banner-container"
+      }
+    >
       <div className="mobile-timeline-banner blue px-1">
         <div
           className="back-button"
@@ -80,7 +87,11 @@ function TimelineBanner({ step, setStep }) {
       <div className="desktop-wrapper">
         <div className="absolute">
           <div className="timeline-container">
-            <div className="timeline-wrapper">
+            <div
+              className={
+                step === 5 ? "timeline-wrapper disabled" : "timeline-wrapper"
+              }
+            >
               {data.map((currStep, i) => {
                 return (
                   <div
@@ -96,7 +107,9 @@ function TimelineBanner({ step, setStep }) {
                     <div
                       role="button"
                       className="icon"
-                      onClick={() => handleTimelineClick(currStep.step)}
+                      onClick={() =>
+                        handleTimelineClick(currStep.step, currStep.url)
+                      }
                     >
                       {currStep.step === currentStep ? (
                         <div className="blue-text circle"> </div>

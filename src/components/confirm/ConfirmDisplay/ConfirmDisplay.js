@@ -3,6 +3,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import "moment/locale/en-gb";
 import moment from "moment";
@@ -33,6 +34,7 @@ function ConfirmDisplay({
   currentBookingType,
   id,
 }) {
+  let history = useHistory();
   const [emailInput, setEmailInput] = useState("");
   const [emailValid, setEmailValid] = useState(null);
   const [dateInput, setDateInput] = useState("");
@@ -85,6 +87,7 @@ function ConfirmDisplay({
   );
 
   useEffect(() => {
+    setStep(4);
     if (currentBookingType === "updateBooking") {
       const selectedDateTime = new Date(reducer.bookingDate);
 
@@ -115,6 +118,7 @@ function ConfirmDisplay({
   const handleBackClick = useCallback(() => {
     window.scrollTo(0, 0);
     setStep(3);
+    history.push("/order/drinks");
   }, []);
 
   const handleBooking = async () => {
@@ -152,6 +156,7 @@ function ConfirmDisplay({
         .then((res) => res.json())
         .then(() => {
           setStep(5);
+          history.push("/order/receipt");
         });
     };
 

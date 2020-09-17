@@ -1,7 +1,13 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect, useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import { connect } from "react-redux";
 import {
   getDish,
@@ -38,6 +44,7 @@ function OrderPage({
   const [loading, setLoading] = useState(true);
 
   const history = useHistory();
+  let location = useLocation();
 
   const handleCancelClick = async () => {
     await fetch(
@@ -56,35 +63,45 @@ function OrderPage({
   };
 
   const setPage = useCallback(() => {
-    if (currentStep === 2)
+    if (location.pathname === "/order/dish")
       return (
-        <DishDisplay
-          currentBookingType={currentBookingType}
-          id={bookingId}
-          dish={currentDish}
-        />
+        <Route exact path="/order/dish">
+          <DishDisplay
+            currentBookingType={currentBookingType}
+            id={bookingId}
+            dish={currentDish}
+          />
+        </Route>
       );
-    if (currentStep === 3)
+    if (location.pathname === "/order/drinks")
       return (
-        <DrinksDisplay
-          id={bookingId}
-          drinks={drinks}
-          drinksAmount={drinksAmount}
-          bookingPeople={bookingPeople}
-        />
+        <Route exact path="/order/drinks">
+          <DrinksDisplay
+            id={bookingId}
+            drinks={drinks}
+            drinksAmount={drinksAmount}
+            bookingPeople={bookingPeople}
+          />
+        </Route>
       );
-    if (currentStep === 4)
+    if (location.pathname === "/order/confirm")
       return (
-        <ConfirmDisplay
-          dish={currentDish}
-          drinks={drinks}
-          id={bookingId}
-          currentBookingType={currentBookingType}
-        />
+        <Route path="/order/confirm">
+          <ConfirmDisplay
+            dish={currentDish}
+            drinks={drinks}
+            id={bookingId}
+            currentBookingType={currentBookingType}
+          />
+        </Route>
       );
-    if (currentStep === 5)
-      return <ReceiptDisplay data={store.getState().reducer} />;
-  }, [currentStep, loading, drinksAmount, currentDish]);
+    if (location.pathname === "/order/receipt")
+      return (
+        <Route path="/order/receipt">
+          <ReceiptDisplay data={store.getState().reducer} />
+        </Route>
+      );
+  }, [currentStep, loading, drinksAmount, currentDish, location]);
 
   const currentPage = setPage(currentStep);
 
@@ -136,29 +153,31 @@ function OrderPage({
   }
 
   return (
-    <>
-      <TimelineBanner
-        currentBookingType={currentBookingType}
-        dishTitle={currentDish.strMeal}
-        step={currentStep}
-      />
-      <div className="page-wrapper">
-        <div className="fadein-animation">{currentPage}</div>
-      </div>
-      <div className="text-left mt-1 px-1">
-        {currentBookingType === "updateBooking" ? (
-          <button
-            type="submit"
-            className="delete-btn white-text red"
-            onClick={() => handleCancelClick()}
-          >
-            <i className="fa fa-times"> </i>Cancel booking
-          </button>
-        ) : (
-          <></>
-        )}
-      </div>
-    </>
+    <Switch>
+      <>
+        <TimelineBanner
+          currentBookingType={currentBookingType}
+          dishTitle={currentDish.strMeal}
+          step={currentStep}
+        />
+        <div className="page-wrapper">
+          <div className="fadein-animation">{currentPage}</div>
+        </div>
+        <div className="text-left mt-1 px-1">
+          {currentBookingType === "updateBooking" ? (
+            <button
+              type="submit"
+              className="delete-btn white-text red"
+              onClick={() => handleCancelClick()}
+            >
+              <i className="fa fa-times"> </i>Cancel booking
+            </button>
+          ) : (
+            <></>
+          )}
+        </div>
+      </>
+    </Switch>
   );
 }
 

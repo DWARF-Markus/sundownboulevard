@@ -2,34 +2,39 @@
   {
     "id": 1,
     "step": 1,
-    "timelineTitle": "START"
+    "timelineTitle": "START",
+    "url": "/"
   },
   {
     "id": 2,
     "step": 2,
     "timelineTitle": "DISHES",
     "bannerTitle": "CHOOSE DISH",
-    "bannerDesc": "Choose your prefered dish for your stay at Sundown Boulevard. If you don’t feel like eating the chosen dish you can generate a new dish instead."
+    "bannerDesc": "Choose your prefered dish for your stay at Sundown Boulevard. If you don’t feel like eating the chosen dish you can generate a new dish instead.",
+    "url": "/order/dish"
   },
   {
     "id": 3,
     "step": 3,
     "timelineTitle": "DRINKS",
     "bannerTitle": "CHOOSE DRINKS",
-    "bannerDesc": "Stay hydrated! Select as many drinks as you want for your meal."
+    "bannerDesc": "Stay hydrated! Select as many drinks as you want for your meal.",
+    "url": "/order/drinks"
   },
   {
     "id": 4,
     "step": 4,
     "timelineTitle": "CONFIRM",
     "bannerTitle": "CONFIRM",
-    "bannerDesc": "Please fill out the booking details by selecting the date you’re visiting along with email and the amount of people arriving with this booking."
+    "bannerDesc": "Please fill out the booking details by selecting the date you’re visiting along with email and the amount of people arriving with this booking.",
+    "url": "/order/confirm"
   },
   {
     "id": 5,
     "step": 5,
     "timelineTitle": "RECEIPT",
     "bannerTitle": "SEE YOU SOON!",
-    "bannerDesc": "Thank you for booking a visit at our restuarant! Below you’ll find the receipt for your booking."
+    "bannerDesc": "Thank you for booking a visit at our restuarant! Below you’ll find the receipt for your booking.",
+    "url": "/order/receipt"
   }
 ]

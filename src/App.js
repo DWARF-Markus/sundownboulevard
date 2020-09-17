@@ -14,6 +14,7 @@ import "./App.scss";
 import "./components/layout/NavBar/NavBar.scss";
 
 import Footer from "./components/layout/Footer/Footer";
+import DishDisplay from "./components/dishes/DishDisplay/DishDisplay";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -113,7 +114,7 @@ function App() {
               <HomePage />
               <Footer />
             </Route>
-            <Route exact path="/order">
+            <Route path="/order">
               <OrderPage />
               <Footer />
             </Route>
