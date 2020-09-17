@@ -224,6 +224,7 @@ function ConfirmDisplay({
         .then((res) => res.json())
         .then(() => {
           setStep(5);
+          history.push("/order/receipt");
         });
     }
   };

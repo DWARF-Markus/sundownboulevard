@@ -8,13 +8,13 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import HomePage from "./pages/HomePage";
+import BookingsPage from "./pages/BookingsPage";
 import OrderPage from "./pages/OrderPage";
 import logo from "./images/beach.svg";
 import "./App.scss";
 import "./components/layout/NavBar/NavBar.scss";
 
 import Footer from "./components/layout/Footer/Footer";
-import DishDisplay from "./components/dishes/DishDisplay/DishDisplay";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -112,6 +112,10 @@ function App() {
           >
             <Route exact path="/">
               <HomePage />
+              <Footer />
+            </Route>
+            <Route exact path="/bookings">
+              <BookingsPage />
               <Footer />
             </Route>
             <Route path="/order">

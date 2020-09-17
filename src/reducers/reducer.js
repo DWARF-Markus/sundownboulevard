@@ -13,6 +13,7 @@ import {
   SET_DISH_BY_ID,
   SET_BOOKING_ID,
   SET_BOOKING_TYPE,
+  SET_BOOKINGS,
   DECREASE_DRINK,
   GET_DISH,
   GET_DISH_ERR,
@@ -27,6 +28,7 @@ const initialState = {
   bookingPeople: "2",
   bookingId: null,
   bookingType: null,
+  multipleBookings: [],
   dish: null,
   drinks: [],
   drinksName: [],
@@ -108,6 +110,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         bookingType: action.payload,
+      };
+    case SET_BOOKINGS:
+      return {
+        ...state,
+        multipleBookings: action.payload,
       };
     case SET_DISH_BY_ID:
       return {

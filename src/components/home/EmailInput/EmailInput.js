@@ -14,6 +14,7 @@ import {
   setPeopleAmount,
   clearDrinks,
   setDrinkOnUpdate,
+  setBookings,
   setDishOnUpdate,
   getDish,
 } from "../../../actions/actions";
@@ -27,6 +28,7 @@ function EmailInput({
   setPeopleAmount,
   setDrinkOnUpdate,
   setDishOnUpdate,
+  setBookings,
   clearDrinks,
   getDish,
 }) {
@@ -54,6 +56,11 @@ function EmailInput({
         .then((data) => {
           if (data.length === 0) {
             setErrMessage("No booking was found with this email");
+          } else if (data.length > 1) {
+            setBookings(data);
+            setEmail(userEmail);
+            window.scrollTo(0, 0);
+            history.push("/bookings");
           } else {
             if (data[0].dishes.length === 0) {
               getDish();
@@ -70,7 +77,7 @@ function EmailInput({
             setPeopleAmount(data[0].numberOfPeople);
             setStep(2);
             window.scrollTo(0, 0);
-            history.push("/order");
+            history.push("/order/dish");
           }
         });
     } else {
@@ -127,6 +134,7 @@ export default connect(null, {
   setPeopleAmount,
   setDrinkOnUpdate,
   setDishOnUpdate,
+  setBookings,
   clearDrinks,
   getDish,
 })(EmailInput);

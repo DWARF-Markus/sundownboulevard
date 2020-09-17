@@ -8,11 +8,13 @@ import {
   DECREASE_DRINK,
   SET_DRINK,
   SET_DRINK_UPDATE,
+  SET_BOOKINGS,
   CLEAR_DRINKS,
   SET_BOOKING_TYPE,
   CLEAR_DISH,
   GET_DISH,
   GET_DISH_ERR,
+  GET_BOOKINGS,
 } from "./types";
 
 export const setLoading = () => {
@@ -93,6 +95,19 @@ export const setBookingType = (type) => {
   return {
     type: SET_BOOKING_TYPE,
     payload: type,
+  };
+};
+
+export const setBookings = (arr) => {
+  return {
+    type: SET_BOOKINGS,
+    payload: arr,
+  };
+};
+
+export const getBookings = (arr) => {
+  return {
+    type: GET_BOOKINGS,
   };
 };
 
