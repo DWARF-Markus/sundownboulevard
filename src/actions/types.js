@@ -17,3 +17,4 @@ export const SET_BOOKINGS = "SET_BOOKINGS";
 export const GET_BOOKINGS = "GET_BOOKINGS";
 export const GET_DISH = "GET_DISH";
 export const GET_DISH_ERR = "GET_DISH_ERR";
+export const SET_NETWORK_STATUS = "SET_NETWORK_STATUS";

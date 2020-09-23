@@ -15,6 +15,7 @@ import {
   GET_DISH,
   GET_DISH_ERR,
   GET_BOOKINGS,
+  SET_NETWORK_STATUS,
 } from "./types";
 
 export const setLoading = () => {
@@ -111,6 +112,13 @@ export const getBookings = (arr) => {
   };
 };
 
+export const setNetworkStatus = (e) => {
+  return {
+    type: SET_NETWORK_STATUS,
+    payload: e,
+  };
+};
+
 export const getDish = () => async (dispatch) => {
   try {
     const res = await fetch(
@@ -124,6 +132,17 @@ export const getDish = () => async (dispatch) => {
       },
     );
     const data = await res.json();
+
+    const currDishArr = JSON.parse(localStorage.getItem("dishes"));
+
+    if (currDishArr === null) {
+      const newArr = [];
+      newArr.push(data[0].meals[0]);
+      localStorage.setItem("dishes", JSON.stringify(newArr));
+    } else {
+      currDishArr.push(data[0].meals[0]);
+      localStorage.setItem("dishes", JSON.stringify(currDishArr));
+    }
 
     dispatch({
       type: GET_DISH,

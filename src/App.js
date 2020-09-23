@@ -7,6 +7,7 @@ import { AnimatedSwitch } from "react-router-transition";
 import { Provider } from "react-redux";
 import store from "./store";
 
+import NetworkDetector from "./components/helpers/NetworkDetector";
 import HomePage from "./pages/HomePage";
 import BookingsPage from "./pages/BookingsPage";
 import OrderPage from "./pages/OrderPage";
@@ -26,6 +27,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
+        <NetworkDetector />
         <div className="App">
           <nav className="navbar-container white">
             <div className="navbar-wrapper">

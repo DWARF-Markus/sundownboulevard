@@ -17,6 +17,7 @@ import {
   DECREASE_DRINK,
   GET_DISH,
   GET_DISH_ERR,
+  SET_NETWORK_STATUS,
 } from "../actions/types";
 
 const intitalBookingDate = new Date();
@@ -35,6 +36,7 @@ const initialState = {
   error: null,
   loading: false,
   step: 2,
+  networkConnection: true,
 };
 
 export default (state = initialState, action) => {
@@ -142,6 +144,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case SET_NETWORK_STATUS:
+      return {
+        ...state,
+        networkConnection: action.payload,
       };
     default:
       return state;

@@ -71,7 +71,7 @@ function TimelineBannerTwo({ step, setStep }) {
                 step === 5 ? "timeline-wrapper disabled" : "timeline-wrapper"
               }
             >
-              <div style={{ width: barWidth + "%" }} class="bar"></div>
+              <div style={{ width: barWidth + "%" }} className="bar"></div>
               <div className="icons">
                 {data.map((currStep, i) => {
                   return (
