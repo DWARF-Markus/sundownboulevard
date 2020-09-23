@@ -20,6 +20,7 @@ import {
 import image from "../images/blue-beach.png";
 import store from "../store";
 import TimelineBanner from "../components/ui/TimelineBanner/TimelineBanner";
+import TimelineBannerTwo from "../components/ui/TimelineBanner/TimelineBannerTwo";
 import DishDisplay from "../components/dishes/DishDisplay/DishDisplay";
 import DrinksDisplay from "../components/drinks/DrinksDisplay/DrinksDisplay";
 import ConfirmDisplay from "../components/confirm/ConfirmDisplay/ConfirmDisplay";
@@ -155,7 +156,12 @@ function OrderPage({
   return (
     <Switch>
       <>
-        <TimelineBanner
+        {/* <TimelineBanner
+          currentBookingType={currentBookingType}
+          dishTitle={currentDish.strMeal}
+          step={currentStep}
+        /> */}
+        <TimelineBannerTwo
           currentBookingType={currentBookingType}
           dishTitle={currentDish.strMeal}
           step={currentStep}

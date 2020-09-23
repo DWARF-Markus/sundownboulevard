@@ -32,7 +32,7 @@ function App() {
               <Link to="/">
                 <div className="navbar-logo">
                   <img src={logo} alt="Sundown Boulevard logo" />
-                  <p className="logo-text">SUNDOWN BOULEVARD</p>
+                  <p className="logo-text">SUNDOWN BOULEVARD - REACT</p>
                 </div>
               </Link>
               <div onClick={() => toggleNav()} className="navbar-mobile-menu">
