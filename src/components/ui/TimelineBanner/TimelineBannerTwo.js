@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { setStep } from "../../../actions/actions";
+import {
+  setStep,
+  setErrorMessage,
+  setErrorActive,
+} from "../../../actions/actions";
 import store from "../../../store";
 import data from "./timeline-banner.json";
 import "./TimelineBannerTwo.scss";
 
-function TimelineBannerTwo({ step, setStep }) {
+function TimelineBannerTwo({ step, setStep, setErrorMessage, setErrorActive }) {
   const [currentStep, setCurrentStep] = useState(2);
   const [bookingType, setBookingType] = useState("");
   const [email, setEmail] = useState("");
@@ -24,7 +28,8 @@ function TimelineBannerTwo({ step, setStep }) {
 
   const handleTimelineClick = (e, url) => {
     if (parseInt(e) === 1 || parseInt(e) === 5) {
-      // wrong error
+      setErrorActive(true);
+      setErrorMessage("You cannot skip to here");
     } else {
       setStep(e);
       history.push(url);
@@ -68,7 +73,9 @@ function TimelineBannerTwo({ step, setStep }) {
           <div className="timeline">
             <div
               className={
-                step === 5 ? "timeline-wrapper disabled" : "timeline-wrapper"
+                step === 5
+                  ? "timeline-wrapper timeline-wrapper--disabled"
+                  : "timeline-wrapper"
               }
             >
               <div style={{ width: barWidth + "%" }} className="bar"></div>
@@ -83,15 +90,15 @@ function TimelineBannerTwo({ step, setStep }) {
                       className={
                         currStep.step === currentStep
                           ? "timeline-entry timeline-entry--active"
-                          : currStep.step < currentStep
+                          : currStep.step < currentStep || currentStep === 5
                           ? "timeline-entry timeline-entry--done"
                           : "timeline-entry"
                       }
                     >
                       <div className="icon">
-                        {currStep.step === currentStep ? (
+                        {currStep.step === currentStep && currentStep !== 5 ? (
                           <i className="fa fa-circle blue-text" />
-                        ) : currStep.step > currentStep || currentStep === 5 ? (
+                        ) : currStep.step < currentStep || currentStep === 5 ? (
                           <i className="fa fa-check blue-text done" />
                         ) : (
                           <i className="fa fa-circle blue-text" />
@@ -133,4 +140,8 @@ const mapStateToProps = (state) => ({
   reducer: state.reducer,
 });
 
-export default connect(mapStateToProps, { setStep })(TimelineBannerTwo);
+export default connect(mapStateToProps, {
+  setStep,
+  setErrorMessage,
+  setErrorActive,
+})(TimelineBannerTwo);

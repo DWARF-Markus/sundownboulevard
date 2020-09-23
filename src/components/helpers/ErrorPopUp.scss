@@ -1,0 +1,61 @@
+@keyframes stayin {
+  0% {
+    left: -20rem;
+  }
+  100% {
+    left: -1rem;
+  }
+}
+
+@keyframes slideinout {
+  0% {
+    left: -20rem;
+  }
+  10% {
+    left: -1rem;
+  }
+  90% {
+    left: -1rem;
+  }
+  100% {
+    left: -20rem;
+  }
+}
+
+.error-popup-wrapper {
+  position: fixed;
+  top: 8rem;
+  left: -20rem;
+  z-index: 1000;
+  transition: 1s ease-in-out;
+
+  &--stay {
+    animation: stayin 1s ease forwards;
+  }
+
+  &--disappear {
+    animation: slideinout 4s ease forwards;
+  }
+
+  &--active {
+    left: -1rem;
+  }
+}
+
+.error-popup-container {
+  padding: 10px 30px;
+  -webkit-transform: skew(-30deg);
+  -moz-transform: skew(-30deg);
+  -o-transform: skew(-30deg);
+  transform: skew(-30deg);
+
+  p {
+    -webkit-transform: skew(30deg);
+    -moz-transform: skew(30deg);
+    -o-transform: skew(30deg);
+    transform: skew(30deg);
+    i {
+      padding: 0 7px;
+    }
+  }
+}

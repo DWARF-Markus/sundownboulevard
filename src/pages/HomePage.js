@@ -3,10 +3,12 @@ import React, { useCallback } from "react";
 import "./HomePage.scss";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
+import store from "../store";
 
 import Slider from "../components/home/Slider/Slider";
 import EmailInput from "../components/home/EmailInput/EmailInput";
 import ContentBox from "../components/home/ContentBox/ContentBox";
+import ErrorPopUp from "../components/helpers/ErrorPopUp";
 
 import { setStep, setBookingType } from "../actions/actions";
 
@@ -14,7 +16,7 @@ import foodImageOne from "../images/food-image1.jpg";
 import foodImageTwo from "../images/food-image2.jpg";
 import foodImageThree from "../images/food-image3.jpg";
 
-function HomePage({ setStep, setBookingType }) {
+function HomePage({ setStep, setBookingType, reducer }) {
   const history = useHistory();
   const sliderImages = [foodImageThree, foodImageOne, foodImageTwo];
 
@@ -27,6 +29,11 @@ function HomePage({ setStep, setBookingType }) {
 
   return (
     <div className="page-wrapper pt-70">
+      {!reducer.networkConnection ? (
+        <ErrorPopUp stay danger text={"No internet detected"} />
+      ) : (
+        <></>
+      )}
       <div className="home-page-wrapper">
         <div className="slider-box">
           <Slider slides={sliderImages} autoPlay={3} />
@@ -56,4 +63,8 @@ function HomePage({ setStep, setBookingType }) {
   );
 }
 
-export default connect(null, { setStep, setBookingType })(HomePage);
+const mapStateToProps = (state) => ({
+  reducer: state.reducer,
+});
+
+export default connect(mapStateToProps, { setStep, setBookingType })(HomePage);

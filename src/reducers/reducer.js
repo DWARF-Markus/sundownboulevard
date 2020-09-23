@@ -18,6 +18,8 @@ import {
   GET_DISH,
   GET_DISH_ERR,
   SET_NETWORK_STATUS,
+  SET_ERROR_MESSAGE,
+  SET_ERROR_ACTIVE,
 } from "../actions/types";
 
 const intitalBookingDate = new Date();
@@ -34,6 +36,7 @@ const initialState = {
   drinks: [],
   drinksName: [],
   error: null,
+  errorActive: false,
   loading: false,
   step: 2,
   networkConnection: true,
@@ -149,6 +152,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         networkConnection: action.payload,
+      };
+    case SET_ERROR_MESSAGE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case SET_ERROR_ACTIVE:
+      return {
+        ...state,
+        errorActive: action.payload,
       };
     default:
       return state;

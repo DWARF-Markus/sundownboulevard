@@ -12,13 +12,15 @@ import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import enGb from "date-fns/locale/en-GB";
 import InputRange from "react-input-range";
+import { v4 as uuidv4 } from "uuid";
 import * as EmailValidator from "email-validator";
-import image from "../../../images/blue-beach.png";
 import {
   setStep,
   setEmail,
   setDate,
   setPeopleAmount,
+  setErrorMessage,
+  setErrorActive,
 } from "../../../actions/actions";
 import "./ConfirmDisplay.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,6 +34,8 @@ function ConfirmDisplay({
   dish,
   reducer,
   currentBookingType,
+  setErrorMessage,
+  setErrorActive,
   id,
 }) {
   let history = useHistory();
@@ -87,26 +91,38 @@ function ConfirmDisplay({
   );
 
   useEffect(() => {
-    setStep(4);
-    if (currentBookingType === "updateBooking") {
-      const selectedDateTime = new Date(reducer.bookingDate);
-
-      setTimeInput(moment(reducer.bookingDate));
-      setDateInput(selectedDateTime);
-
-      setEmailInput(reducer.bookingEmail);
-      setEmailValid(true);
-      setDateValid(true);
-      setTimeValid(true);
-      setPeopleAmountInput(reducer.bookingPeople);
-      setDateToSend(moment(reducer.bookingDate).format("DD-MM-YYYY"));
-      setTimeToSend(moment(reducer.bookingDate).format("HH:mm"));
+    if (reducer.dish === null) {
+      setStep(2);
+      setErrorActive(true);
+      setErrorMessage("Please choose a dish");
+      history.push("/order/dish");
+    } else if (reducer.drinks.length === 0) {
+      setStep(3);
+      setErrorActive(true);
+      setErrorMessage("Please choose minimum one drink");
+      history.push("/order/drinks");
     } else {
-      const date = new Date();
-      setDateInput(date);
-      setPeopleAmountInput(2);
-      setDateToSend(moment(date).format("DD-MM-YYYY"));
-      setTimeToSend(moment().format("HH:mm"));
+      setStep(4);
+      if (currentBookingType === "updateBooking") {
+        const selectedDateTime = new Date(reducer.bookingDate);
+
+        setTimeInput(moment(reducer.bookingDate));
+        setDateInput(selectedDateTime);
+
+        setEmailInput(reducer.bookingEmail);
+        setEmailValid(true);
+        setDateValid(true);
+        setTimeValid(true);
+        setPeopleAmountInput(reducer.bookingPeople);
+        setDateToSend(moment(reducer.bookingDate).format("DD-MM-YYYY"));
+        setTimeToSend(moment(reducer.bookingDate).format("HH:mm"));
+      } else {
+        const date = new Date();
+        setDateInput(date);
+        setPeopleAmountInput(2);
+        setDateToSend(moment(date).format("DD-MM-YYYY"));
+        setTimeToSend(moment().format("HH:mm"));
+      }
     }
   }, []);
 
@@ -127,105 +143,143 @@ function ConfirmDisplay({
 
     const fullDateTime = `${dateToSend} ${timeToSend}`;
 
-    const postDetails = async (bookId) => {
-      await fetch(
-        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/dishes?dishes[0][dishId]=${dish.idMeal}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-          },
-        },
+    if (!reducer.networkConnection) {
+      const offlineBookingsArr = JSON.parse(
+        localStorage.getItem("offlineBookings"),
       );
 
-      const drinksToPost = drinks
-        .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
-        .join("&");
+      const offlineBookingObj = {
+        id: uuidv4(),
+        email: reducer.bookingEmail,
+        peopleAmount: reducer.bookingPeople,
+        startTime: fullDateTime,
+        dish: reducer.dish,
+        drinks: reducer.drinks,
+      };
 
-      await fetch(
-        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/drinks?${drinksToPost}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-          },
-        },
-      )
-        .then((res) => res.json())
-        .then(() => {
-          setStep(5);
-          history.push("/order/receipt");
-        });
-    };
+      if (offlineBookingsArr === null) {
+        const newArr = [];
 
-    // CREATING A NEW BOOKING
-    if (currentBookingType === "newBooking") {
-      await fetch("https://krh-sundown.dev.dwarf.dk/api/user/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-        },
-        body: JSON.stringify({
-          startTime: fullDateTime,
-          numberOfPeople: reducer.bookingPeople,
-          email: reducer.bookingEmail,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          postDetails(data.bookingId);
-        });
+        newArr.push(offlineBookingObj);
 
-      // UPDATING A NEW BOOKING
+        localStorage.setItem("offlineBookings", JSON.stringify(newArr));
+      } else {
+        offlineBookingsArr.push(offlineBookingObj);
+
+        localStorage.setItem(
+          "offlineBookings",
+          JSON.stringify(offlineBookingsArr),
+        );
+      }
+
+      setTimeout(() => {
+        setStep(5);
+        history.push("/order/receipt");
+      }, 540);
     } else {
-      await fetch(`https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-          "Access-Control-Allow-Origin": "*",
-          mode: "no-cors",
-        },
-        body: JSON.stringify({
-          startTime: fullDateTime,
-          numberOfPeople: peopleAmountInput,
-          email: emailInput,
-        }),
-      });
+      const postDetails = async (bookId) => {
+        await fetch(
+          `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/dishes?dishes[0][dishId]=${dish.idMeal}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+            },
+          },
+        );
 
-      await fetch(
-        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/dishes?dishes[0][dishId]=${dish.idMeal}`,
-        {
-          method: "PUT",
+        const drinksToPost = drinks
+          .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
+          .join("&");
+
+        await fetch(
+          `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${bookId}/drinks?${drinksToPost}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+            },
+          },
+        )
+          .then((res) => res.json())
+          .then(() => {
+            setStep(5);
+            history.push("/order/receipt");
+          });
+      };
+
+      // CREATING A NEW BOOKING
+      if (currentBookingType === "newBooking") {
+        await fetch("https://krh-sundown.dev.dwarf.dk/api/user/bookings", {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           },
-        },
-      );
+          body: JSON.stringify({
+            startTime: fullDateTime,
+            numberOfPeople: reducer.bookingPeople,
+            email: reducer.bookingEmail,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            postDetails(data.bookingId);
+          });
 
-      const drinksToPost = drinks
-        .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
-        .join("&");
-
-      await fetch(
-        `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/drinks?${drinksToPost}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+        // UPDATING A NEW BOOKING
+      } else {
+        await fetch(
+          `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+              "Access-Control-Allow-Origin": "*",
+              mode: "no-cors",
+            },
+            body: JSON.stringify({
+              startTime: fullDateTime,
+              numberOfPeople: peopleAmountInput,
+              email: emailInput,
+            }),
           },
-        },
-      )
-        .then((res) => res.json())
-        .then(() => {
-          setStep(5);
-          history.push("/order/receipt");
-        });
+        );
+
+        await fetch(
+          `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/dishes?dishes[0][dishId]=${dish.idMeal}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+            },
+          },
+        );
+
+        const drinksToPost = drinks
+          .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
+          .join("&");
+
+        await fetch(
+          `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/drinks?${drinksToPost}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+            },
+          },
+        )
+          .then((res) => res.json())
+          .then(() => {
+            setStep(5);
+            history.push("/order/receipt");
+          });
+      }
     }
   };
 
@@ -256,7 +310,7 @@ function ConfirmDisplay({
       <div className="confirm-display-wrapper mt-2">
         <div className="confirm-loading-screen mt-2">
           <div className="confirm-loader mt-2">
-            <img className="loader-animation" src={image} alt="loading icon" />
+            <i className="fa fa-spinner blue-text loader-animation pt-1" />
             <p className="logo-text blue-text">Initializing new booking ...</p>
           </div>
         </div>
@@ -436,4 +490,6 @@ export default connect(mapStateToProps, {
   setEmail,
   setDate,
   setPeopleAmount,
+  setErrorMessage,
+  setErrorActive,
 })(ConfirmDisplay);

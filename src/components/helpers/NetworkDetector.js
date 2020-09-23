@@ -1,15 +1,30 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { setNetworkStatus } from "../../actions/actions";
+import {
+  setNetworkStatus,
+  setErrorMessage,
+  setErrorActive,
+} from "../../actions/actions";
 
-function NetworkDetector({ setNetworkStatus }) {
+function NetworkDetector({
+  setNetworkStatus,
+  setErrorMessage,
+  setErrorActive,
+}) {
   const handleConnectionChange = () => {
     const condition = navigator.onLine;
     setNetworkStatus(condition);
+
+    if (condition) {
+      setErrorActive(false);
+      setErrorMessage("");
+    } else {
+      setErrorActive(true);
+      setErrorMessage("No internet detected");
+    }
   };
 
   useEffect(() => {
-    console.log("triggered");
     window.addEventListener("online", handleConnectionChange);
     window.addEventListener("offline", handleConnectionChange);
 
@@ -22,4 +37,8 @@ function NetworkDetector({ setNetworkStatus }) {
   return null;
 }
 
-export default connect(null, { setNetworkStatus })(NetworkDetector);
+export default connect(null, {
+  setNetworkStatus,
+  setErrorMessage,
+  setErrorActive,
+})(NetworkDetector);

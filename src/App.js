@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { AnimatedSwitch } from "react-router-transition";
 
@@ -105,7 +105,6 @@ function App() {
               </ul>
             </div>
           </nav>
-
           <AnimatedSwitch
             atEnter={{ opacity: 0 }}
             atLeave={{ opacity: 1 }}

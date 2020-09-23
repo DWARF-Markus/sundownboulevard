@@ -1,14 +1,17 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { getDish, setStep } from "../../../actions/actions";
+import { getDish, getDishOffline, setStep } from "../../../actions/actions";
 import "./DishDisplay.scss";
 
-function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
+function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
   let history = useHistory();
 
   useEffect(() => {
     setStep(2);
+    if (reducer.dish === null) {
+      getDish();
+    }
   }, []);
 
   const handleDishSubmit = useCallback(async () => {
@@ -22,24 +25,44 @@ function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
     history.push("/");
   }, []);
 
+  const handleNewDish = () => {
+    if (reducer.networkConnection) {
+      getDish();
+    } else {
+      getDishOffline();
+    }
+  };
+
   return (
     <>
       <div className="dish-display-container mt-1">
         <div className="dish-display-desc p-1">
-          <h3 className="logo-text blue-text">{dish.strCategory}</h3>
-          <h1 className="mt-1">{dish.strMeal}</h1>
-          <p className="mt-1">{dish.strInstructions}</p>
+          {reducer.dish !== null ? (
+            <>
+              <h3 className="logo-text blue-text">
+                {reducer.dish.strCategory}
+              </h3>
+              <h1 className="mt-1">{reducer.dish.strMeal}</h1>
+              <p className="mt-1">{reducer.dish.strInstructions}</p>
+            </>
+          ) : (
+            <></>
+          )}
           <button
             type="submit"
             className="refresh-btn blue-text"
-            onClick={() => getDish()}
+            onClick={() => handleNewDish()}
           >
             NEW DISH
             <i className="fa fa-refresh"> </i>
           </button>
         </div>
         <div className="dish-display-img p-1">
-          <img src={dish.strMealThumb} alt="image of meal" />
+          {reducer.dish !== null ? (
+            <img src={reducer.dish.strMealThumb} alt="image of meal" />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="btn-container px-1">
@@ -73,7 +96,9 @@ function DishDisplay({ getDish, setStep, dish, id, currentBookingType }) {
 }
 
 const mapStateToProps = (state) => ({
-  reducer: state.dish,
+  reducer: state.reducer,
 });
 
-export default connect(mapStateToProps, { getDish, setStep })(DishDisplay);
+export default connect(mapStateToProps, { getDish, getDishOffline, setStep })(
+  DishDisplay,
+);

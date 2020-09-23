@@ -16,6 +16,8 @@ import {
   GET_DISH_ERR,
   GET_BOOKINGS,
   SET_NETWORK_STATUS,
+  SET_ERROR_MESSAGE,
+  SET_ERROR_ACTIVE,
 } from "./types";
 
 export const setLoading = () => {
@@ -119,6 +121,20 @@ export const setNetworkStatus = (e) => {
   };
 };
 
+export const setErrorMessage = (message) => {
+  return {
+    type: SET_ERROR_MESSAGE,
+    payload: message,
+  };
+};
+
+export const setErrorActive = (e) => {
+  return {
+    type: SET_ERROR_ACTIVE,
+    payload: e,
+  };
+};
+
 export const getDish = () => async (dispatch) => {
   try {
     const res = await fetch(
@@ -154,6 +170,16 @@ export const getDish = () => async (dispatch) => {
       payload: err,
     });
   }
+};
+
+export const getDishOffline = () => (dispatch) => {
+  const dishArr = JSON.parse(localStorage.getItem("dishes"));
+  const meal = dishArr[Math.floor(Math.random() * dishArr.length)];
+
+  dispatch({
+    type: GET_DISH,
+    payload: meal,
+  });
 };
 
 export const setDishOnUpdate = (id) => async (dispatch) => {

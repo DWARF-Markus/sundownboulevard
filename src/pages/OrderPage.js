@@ -16,10 +16,11 @@ import {
   clearDish,
   clearDrinks,
   setBookingType,
+  setErrorMessage,
+  setErrorActive,
 } from "../actions/actions";
-import image from "../images/blue-beach.png";
 import store from "../store";
-import TimelineBanner from "../components/ui/TimelineBanner/TimelineBanner";
+import ErrorPopUp from "../components/helpers/ErrorPopUp";
 import TimelineBannerTwo from "../components/ui/TimelineBanner/TimelineBannerTwo";
 import DishDisplay from "../components/dishes/DishDisplay/DishDisplay";
 import DrinksDisplay from "../components/drinks/DrinksDisplay/DrinksDisplay";
@@ -34,6 +35,8 @@ function OrderPage({
   clearDrinks,
   clearDish,
   setBookingType,
+  setErrorMessage,
+  setErrorActive,
 }) {
   const [currentDish, setCurrentDish] = useState("");
   const [currentStep, setCurrentStep] = useState("");
@@ -116,7 +119,14 @@ function OrderPage({
       const { bookingId } = store.getState().reducer;
       const { bookingType } = store.getState().reducer;
 
-      setCurrentDish(dish);
+      if (!reducer.networkConnection) {
+        const dishArr = JSON.parse(localStorage.getItem("dishes"));
+        const meal = dishArr[Math.floor(Math.random() * dishArr.length)];
+
+        setCurrentDish(meal);
+      } else {
+        setCurrentDish(dish);
+      }
       setCurrentStep(step);
       setDrinks(drinks);
       setDrinksAmount(drinksAmount);
@@ -132,7 +142,6 @@ function OrderPage({
       setBookingType("newBooking");
       clearDrinks();
       clearDish();
-      getDish();
     }
 
     setTimeout(() => {
@@ -145,7 +154,7 @@ function OrderPage({
       <div className="confirm-display-wrapper min-height">
         <div className="confirm-loading-screen">
           <div className="confirm-loader">
-            <img className="loader-animation" src={image} alt="loading icon" />
+            <i className="fa fa-spinner blue-text loader-animation pt-1" />
             <p className="logo-text blue-text">Loading dish ...</p>
           </div>
         </div>
@@ -156,16 +165,13 @@ function OrderPage({
   return (
     <Switch>
       <>
-        {/* <TimelineBanner
-          currentBookingType={currentBookingType}
-          dishTitle={currentDish.strMeal}
-          step={currentStep}
-        /> */}
         <TimelineBannerTwo
           currentBookingType={currentBookingType}
-          dishTitle={currentDish.strMeal}
+          // dishTitle={currentDish.strMeal}
           step={currentStep}
         />
+        <ErrorPopUp text={reducer.error} />
+
         <div className="page-wrapper">
           <div className="fadein-animation">{currentPage}</div>
         </div>
@@ -198,4 +204,6 @@ export default connect(mapStateToProps, {
   clearDrinks,
   clearDish,
   setBookingType,
+  setErrorMessage,
+  setErrorActive,
 })(OrderPage);
