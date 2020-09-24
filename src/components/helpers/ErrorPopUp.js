@@ -5,11 +5,10 @@ import { setErrorActive } from "../../actions/actions";
 
 function ErrorPopUp({ text, danger, stay, reducer, setErrorActive }) {
   useEffect(() => {
-    console.log("triggered");
     setTimeout(() => {
       setErrorActive(false);
     }, 4000);
-  }, [reducer.errorActive]);
+  }, [reducer.error]);
 
   return (
     <div

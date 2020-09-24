@@ -14,6 +14,7 @@ import {
   SET_BOOKING_ID,
   SET_BOOKING_TYPE,
   SET_BOOKINGS,
+  SET_OFFLINE_BOOKINGS,
   DECREASE_DRINK,
   GET_DISH,
   GET_DISH_ERR,
@@ -40,6 +41,7 @@ const initialState = {
   loading: false,
   step: 2,
   networkConnection: true,
+  offlineBookings: [],
 };
 
 export default (state = initialState, action) => {
@@ -120,6 +122,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         multipleBookings: action.payload,
+      };
+    case SET_OFFLINE_BOOKINGS:
+      return {
+        ...state,
+        offlineBookings: action.payload,
       };
     case SET_DISH_BY_ID:
       return {

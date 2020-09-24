@@ -14,6 +14,7 @@ export const SET_PEOPLE_AMOUNT = "SET_PEOPLE_AMOUNT";
 export const SET_BOOKING_ID = "SET_BOOKING_ID";
 export const SET_BOOKING_TYPE = "SET_BOOKING_TYPE";
 export const SET_BOOKINGS = "SET_BOOKINGS";
+export const SET_OFFLINE_BOOKINGS = "SET_OFFLINE_BOOKINGS";
 export const GET_BOOKINGS = "GET_BOOKINGS";
 export const GET_DISH = "GET_DISH";
 export const GET_DISH_ERR = "GET_DISH_ERR";

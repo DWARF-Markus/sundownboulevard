@@ -29,8 +29,15 @@ function BookingsPage({
   const [loadNewAmount, setLoadNewAmount] = useState(5);
   const [bookings, setBookings] = useState([]);
   const [bookingsToOutput, setBookingsToOutput] = useState([]);
+  const [offlineBookings, setOfflineBookings] = useState([]);
+  const [hasOfflineBookings, setHasOfflineBookings] = useState(false);
 
   useEffect(() => {
+    if (reducer.offlineBookings.length > 0) {
+      setOfflineBookings(reducer.offlineBookings);
+      setHasOfflineBookings(true);
+    }
+
     setNumberOfBookings(reducer.multipleBookings.length);
     setBookings(reducer.multipleBookings);
     setBookingsToOutput(reducer.multipleBookings.slice(0, 5));
@@ -47,6 +54,91 @@ function BookingsPage({
 
     setStep(2);
     history.push("/order/dish");
+  };
+
+  const handleBookingDetails = async (id, obj) => {
+    console.log(id);
+
+    await fetch(
+      `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/dishes?dishes[0][dishId]=${obj.dish.idMeal}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+        },
+      },
+    );
+
+    const drinksToPost = obj.drinks
+      .map((drink, index) => `drinks[${index}][drinkId]=${drink}`)
+      .join("&");
+
+    await fetch(
+      `https://krh-sundown.dev.dwarf.dk/api/user/bookings/${id}/drinks?${drinksToPost}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+        },
+      },
+    )
+      .then((res) => res.json())
+      .then(() => {
+        const offlineBookingsArr = JSON.parse(
+          localStorage.getItem("offlineBookings"),
+        );
+
+        const filteredArr = offlineBookingsArr.filter(
+          (booking) => booking.id !== obj.id,
+        );
+
+        localStorage.setItem("offlineBookings", JSON.stringify(filteredArr));
+
+        setTimeout(async () => {
+          setOfflineBookings(
+            offlineBookings.filter((booking) => booking.id !== obj.id),
+          );
+
+          if (offlineBookings.length === 1) {
+            setHasOfflineBookings(false);
+          }
+
+          await fetch(
+            `
+        https://krh-sundown.dev.dwarf.dk/api/bookings?filter[email]=${obj.email}&include=drinks,dishes,drinks.drinkInfo&sort=startTime`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+              },
+            },
+          )
+            .then((res) => res.json())
+            .then((data) => setBookingsToOutput(data));
+        }, 540);
+      });
+  };
+
+  const handleOfflineBookingSelect = async (obj) => {
+    await fetch("https://krh-sundown.dev.dwarf.dk/api/user/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+      },
+      body: JSON.stringify({
+        startTime: obj.startTime,
+        numberOfPeople: obj.peopleAmount,
+        email: obj.email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        handleBookingDetails(data.bookingId, obj);
+      });
   };
 
   const loadMoreBookings = () => {
@@ -67,6 +159,44 @@ function BookingsPage({
           Bookings by <span className="red-text">{reducer.bookingEmail}</span>
         </h3>
       </div>
+
+      {hasOfflineBookings ? (
+        <div>
+          <h5 className="red-text mt-1">
+            <i className="fa fa-exclamation-triangle px-1" />
+            You have incomplete bookings!
+          </h5>
+          <div className="p-1 offline-bookings-container">
+            {offlineBookings.map((booking) => {
+              return (
+                <div className="offline-booking-entry">
+                  <p>
+                    {booking.peopleAmount} x {booking.dish.strMeal}
+                  </p>
+                  <p>{booking.drinks.length} drinks</p>
+                  <p>{booking.peopleAmount} people</p>
+                  <p>
+                    <b>{booking.email}</b> <br /> {booking.startTime}
+                  </p>
+                  <div className="text-center">
+                    <button
+                      className="primary-home-btn"
+                      onClick={() => handleOfflineBookingSelect(booking)}
+                    >
+                      SEND
+                      <i className="fa fa-envelope" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="divider px-1" />
+        </div>
+      ) : (
+        <></>
+      )}
+
       <div className="p-1">
         <div className="table-header">
           <p class="id red-text">
@@ -96,12 +226,14 @@ function BookingsPage({
                 <p>{booking.startTime}</p>
                 <p>{booking.endTime}</p>
                 <p>{booking.numberOfPeople}</p>
-                <button
-                  onClick={() => handleBookingSelect(booking)}
-                  className="primary-home-btn"
-                >
-                  Update
-                </button>
+                <div className="text-center">
+                  <button
+                    onClick={() => handleBookingSelect(booking)}
+                    className="primary-home-btn"
+                  >
+                    UPDATE
+                  </button>
+                </div>
               </div>
             );
           })}

@@ -3,16 +3,27 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { setStep } from "../../../actions/actions";
+import {
+  setStep,
+  setErrorMessage,
+  setErrorActive,
+} from "../../../actions/actions";
 import "./ReceiptDisplay.scss";
 
-function ReceiptDisplay({ data, setStep }) {
+function ReceiptDisplay({
+  data,
+  setStep,
+  setErrorMessage,
+  setErrorActive,
+  reducer,
+}) {
   const history = useHistory();
 
   const [dish, setDish] = useState("");
   const [email, setEmail] = useState("");
   const [guests, setGuests] = useState("");
   const [drinksToOutput, setDrinksToOutput] = useState([]);
+  const [bookingDate, setBookingDate] = useState("");
   const drinksToShow = [];
 
   const countInArray = useCallback((arr, id) => {
@@ -26,21 +37,39 @@ function ReceiptDisplay({ data, setStep }) {
   }, []);
 
   useEffect(() => {
-    setDish(data.dish.strMeal);
-    setEmail(data.bookingEmail);
-    setGuests(data.bookingPeople);
+    if (reducer.dish === null) {
+      setStep(2);
+      setErrorMessage("You need to pick a dish first");
+      setErrorActive(true);
+      history.push("/order/dish");
+    } else if (reducer.drinks.length === 0) {
+      setStep(3);
+      setErrorMessage("You need to pick minimum one drink");
+      setErrorActive(true);
+      history.push("/order/drinks");
+    } else if (reducer.bookingEmail === null) {
+      setStep(4);
+      setErrorMessage("Please fill out all information for this booking");
+      setErrorActive(true);
+      history.push("/order/confirm");
+    } else {
+      setDish(data.dish.strMeal);
+      setEmail(data.bookingEmail);
+      setGuests(data.bookingPeople);
+      setBookingDate(data.bookingDate);
 
-    data.drinksName.map((drink) => {
-      return drinksToShow.push({
-        id: drink.id,
-        count: countInArray(data.drinksName, drink.id),
-        name: drink.name,
+      data.drinksName.map((drink) => {
+        return drinksToShow.push({
+          id: drink.id,
+          count: countInArray(data.drinksName, drink.id),
+          name: drink.name,
+        });
       });
-    });
 
-    setDrinksToOutput([
-      ...new Map(drinksToShow.map((item) => [item.id, item])).values(),
-    ]);
+      setDrinksToOutput([
+        ...new Map(drinksToShow.map((item) => [item.id, item])).values(),
+      ]);
+    }
   }, [data]);
 
   const handleHomeBtn = useCallback(() => {
@@ -59,7 +88,8 @@ function ReceiptDisplay({ data, setStep }) {
           {drinksToOutput.map((drink) => {
             return (
               <p>
-                {drink.count}x <span>{drink.name}</span>
+                {drink ? drink.count : ""}x{" "}
+                <span>{drink ? drink.name : ""}</span>
               </p>
             );
           })}
@@ -70,7 +100,7 @@ function ReceiptDisplay({ data, setStep }) {
             Email <span>{email}</span>
           </p>
           <p>
-            Date and time <span>{data.bookingDate}</span>
+            Date and time <span>{bookingDate}</span>
           </p>
           <p>
             Guests <span>{guests}</span>
@@ -88,4 +118,12 @@ function ReceiptDisplay({ data, setStep }) {
   );
 }
 
-export default connect(null, { setStep })(ReceiptDisplay);
+const mapStateToProps = (state) => ({
+  reducer: state.reducer,
+});
+
+export default connect(mapStateToProps, {
+  setStep,
+  setErrorMessage,
+  setErrorActive,
+})(ReceiptDisplay);

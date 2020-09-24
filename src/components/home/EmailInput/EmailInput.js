@@ -15,7 +15,10 @@ import {
   clearDrinks,
   setDrinkOnUpdate,
   setBookings,
+  setOfflineBookings,
   setDishOnUpdate,
+  setErrorMessage,
+  setErrorActive,
   getDish,
 } from "../../../actions/actions";
 
@@ -29,12 +32,14 @@ function EmailInput({
   setDrinkOnUpdate,
   setDishOnUpdate,
   setBookings,
+  setOfflineBookings,
+  setErrorMessage,
+  setErrorActive,
   clearDrinks,
   getDish,
 }) {
   const history = useHistory();
   const [userEmail, setUserEmail] = useState("");
-  const [errMessage, setErrMessage] = useState("");
 
   const handleUpdateBookingClick = async () => {
     const isEmailValid = EmailValidator.validate(userEmail);
@@ -54,8 +59,19 @@ function EmailInput({
       )
         .then((res) => res.json())
         .then((data) => {
-          if (data.length === 0) {
-            setErrMessage("No booking was found with this email");
+          setOfflineBookings([]);
+          const offlineBookings = JSON.parse(
+            localStorage.getItem("offlineBookings"),
+          ).filter((booking) => booking.email === userEmail);
+
+          if (offlineBookings.length > 0) {
+            setBookings(data);
+            setOfflineBookings(offlineBookings);
+            setEmail(userEmail);
+            history.push("/bookings");
+          } else if (data.length === 0) {
+            setErrorMessage("No booking was found with this email");
+            setErrorActive(true);
           } else if (data.length > 1) {
             setBookings(data);
             setEmail(userEmail);
@@ -81,7 +97,8 @@ function EmailInput({
           }
         });
     } else {
-      setErrMessage("Please enter a valid email");
+      setErrorMessage("Please enter a valid email");
+      setErrorActive(true);
     }
   };
 
@@ -96,9 +113,6 @@ function EmailInput({
       </div>
       <div className="email-input-wrapper mt-1">
         <div className="input-pair">
-          <label htmlFor="email-input" className="red-text">
-            {errMessage || " "}
-          </label>
           <label htmlFor="email-input">Email</label>
           <input
             type="email"
@@ -135,6 +149,9 @@ export default connect(null, {
   setDrinkOnUpdate,
   setDishOnUpdate,
   setBookings,
+  setOfflineBookings,
+  setErrorMessage,
+  setErrorActive,
   clearDrinks,
   getDish,
 })(EmailInput);

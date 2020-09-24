@@ -1,6 +1,6 @@
 @keyframes stayin {
   0% {
-    left: -20rem;
+    left: -30rem;
   }
   100% {
     left: -1rem;
@@ -9,7 +9,7 @@
 
 @keyframes slideinout {
   0% {
-    left: -20rem;
+    left: -30rem;
   }
   10% {
     left: -1rem;
@@ -18,14 +18,14 @@
     left: -1rem;
   }
   100% {
-    left: -20rem;
+    left: -30rem;
   }
 }
 
 .error-popup-wrapper {
   position: fixed;
   top: 8rem;
-  left: -20rem;
+  left: -30rem;
   z-index: 1000;
   transition: 1s ease-in-out;
 

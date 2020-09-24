@@ -29,11 +29,8 @@ function HomePage({ setStep, setBookingType, reducer }) {
 
   return (
     <div className="page-wrapper pt-70">
-      {!reducer.networkConnection ? (
-        <ErrorPopUp stay danger text={"No internet detected"} />
-      ) : (
-        <></>
-      )}
+      <ErrorPopUp stay danger text={reducer.error} />
+
       <div className="home-page-wrapper">
         <div className="slider-box">
           <Slider slides={sliderImages} autoPlay={3} />

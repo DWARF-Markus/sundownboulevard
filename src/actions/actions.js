@@ -9,6 +9,7 @@ import {
   SET_DRINK,
   SET_DRINK_UPDATE,
   SET_BOOKINGS,
+  SET_OFFLINE_BOOKINGS,
   CLEAR_DRINKS,
   SET_BOOKING_TYPE,
   CLEAR_DISH,
@@ -104,6 +105,13 @@ export const setBookingType = (type) => {
 export const setBookings = (arr) => {
   return {
     type: SET_BOOKINGS,
+    payload: arr,
+  };
+};
+
+export const setOfflineBookings = (arr) => {
+  return {
+    type: SET_OFFLINE_BOOKINGS,
     payload: arr,
   };
 };

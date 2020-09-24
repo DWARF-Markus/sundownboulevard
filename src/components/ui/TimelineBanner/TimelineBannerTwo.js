@@ -27,7 +27,7 @@ function TimelineBannerTwo({ step, setStep, setErrorMessage, setErrorActive }) {
   };
 
   const handleTimelineClick = (e, url) => {
-    if (parseInt(e) === 1 || parseInt(e) === 5) {
+    if (parseInt(e) === 1) {
       setErrorActive(true);
       setErrorMessage("You cannot skip to here");
     } else {
