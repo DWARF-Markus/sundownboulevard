@@ -7,12 +7,37 @@ import "./DishDisplay.scss";
 function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
   let history = useHistory();
 
+  const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [initLoading, setInitLoading] = useState(true);
+  const [prevDish, setPrevDish] = useState({});
+  const [currDish, setCurrDish] = useState({});
+
   useEffect(() => {
     setStep(2);
     if (reducer.dish === null) {
       getDish();
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
+    } else {
+      setCurrDish(reducer.dish);
+      setLoading(false);
     }
+    setTimeout(() => {
+      setInitLoading(false);
+    }, 900);
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPrevDish(reducer.dish);
+    }, 420);
+    setTimeout(() => {
+      setCurrDish(reducer.dish);
+    }, 890);
+  }, [reducer.dish]);
 
   const handleDishSubmit = useCallback(async () => {
     window.scrollTo(0, 0);
@@ -26,43 +51,98 @@ function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
   }, []);
 
   const handleNewDish = () => {
+    setButtonLoading(true);
     if (reducer.networkConnection) {
       getDish();
+
+      setPrevDish(reducer.dish);
     } else {
       getDishOffline();
     }
+
+    setTimeout(() => {
+      setLoading(true);
+    }, 1000);
+
+    setTimeout(() => {
+      setLoading(false);
+      setButtonLoading(false);
+    }, 2000);
   };
+
+  if (initLoading) {
+    return (
+      <div className="confirm-display-wrapper">
+        <div className="confirm-loading-screen">
+          <div className="confirm-loader">
+            <i className="fa fa-spinner blue-text loader-animation pt-1" />
+            <p className="logo-text blue-text">Loading dish ...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className="dish-display-container mt-1">
-        <div className="dish-display-desc p-1">
-          {reducer.dish !== null ? (
-            <>
-              <h3 className="logo-text blue-text">
-                {reducer.dish.strCategory}
-              </h3>
-              <h1 className="mt-1">{reducer.dish.strMeal}</h1>
-              <p className="mt-1">{reducer.dish.strInstructions}</p>
-            </>
-          ) : (
-            <></>
-          )}
-          <button
-            type="submit"
-            className="refresh-btn blue-text"
-            onClick={() => handleNewDish()}
-          >
-            NEW DISH
-            <i className="fa fa-refresh"> </i>
-          </button>
+      <div
+        className={
+          loading
+            ? "dish-presentation dish-presentation--transition dish-presentation--loading"
+            : "dish-presentation dish-presentation--no-transition"
+        }
+      >
+        <div
+          className={
+            loading
+              ? "dish-display-container dish-display-container-prev dish-display-container-prev--loading mt-1"
+              : "dish-display-container dish-display-container-prev mt-1"
+          }
+        >
+          <div className="dish-display-desc p-1">
+            {prevDish !== null ? (
+              <>
+                <h3 className="logo-text blue-text">{prevDish.strCategory}</h3>
+                <h1 className="mt-1">{prevDish.strMeal}</h1>
+                <p className="mt-1">{prevDish.strInstructions}</p>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="dish-display-img p-1">
+            {prevDish !== null ? (
+              <img src={prevDish.strMealThumb} alt="image of meal" />
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
-        <div className="dish-display-img p-1">
-          {reducer.dish !== null ? (
-            <img src={reducer.dish.strMealThumb} alt="image of meal" />
-          ) : (
-            <></>
-          )}
+        <div
+          className={
+            loading
+              ? "dish-display-container dish-display-container--transition dish-display-container--loading mt-1"
+              : "dish-display-container dish-display-container--no-transition mt-1"
+          }
+        >
+          <div className="dish-display-desc p-1">
+            {currDish !== null ? (
+              <>
+                <h3 className="logo-text blue-text">{currDish.strCategory}</h3>
+                <h1 className="mt-1">{currDish.strMeal}</h1>
+                <p className="mt-1">{currDish.strInstructions}</p>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="dish-display-img p-1">
+            {currDish !== null ? (
+              <img src={currDish.strMealThumb} alt="image of meal" />
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </div>
       <div className="btn-container px-1">
@@ -79,7 +159,20 @@ function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
             </button>
           </div>
         </div>
-        <div> </div>
+        <div className="text-center">
+          <button
+            type="submit"
+            className={
+              buttonLoading
+                ? "refresh-btn blue-text refresh-btn--spin"
+                : "refresh-btn blue-text"
+            }
+            onClick={() => handleNewDish()}
+          >
+            NEW DISH
+            <i className="fa fa-refresh"> </i>
+          </button>
+        </div>
         <div className="text-right">
           <button
             type="submit"

@@ -154,8 +154,8 @@ function OrderPage({
       <div className="confirm-display-wrapper min-height">
         <div className="confirm-loading-screen">
           <div className="confirm-loader">
-            <i className="fa fa-spinner blue-text loader-animation pt-1" />
-            <p className="logo-text blue-text">Loading dish ...</p>
+            {/* <i className="fa fa-spinner blue-text loader-animation pt-1" />
+            <p className="logo-text blue-text">Loading dish ...</p> */}
           </div>
         </div>
       </div>

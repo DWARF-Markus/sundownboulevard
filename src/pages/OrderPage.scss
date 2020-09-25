@@ -41,6 +41,12 @@
   transition: 0.15s ease;
   font-size: 11px;
   font-weight: 600;
+
+  &--spin {
+    i {
+      animation: spin 1s forwards;
+    }
+  }
 }
 
 .refresh-btn:hover {
@@ -62,7 +68,7 @@
 }
 
 .fadein-animation {
-  min-height: calc(100vh - 260px);
+  min-height: calc(100vh - 360px);
   display: grid;
   align-items: center;
   transition: 0.2s ease;
@@ -95,5 +101,10 @@
 @media (min-width: 630px) {
   .btn-container {
     animation-name: none;
+  }
+
+  .refresh-btn {
+    padding: 15px 40px;
+    font-size: 14px;
   }
 }

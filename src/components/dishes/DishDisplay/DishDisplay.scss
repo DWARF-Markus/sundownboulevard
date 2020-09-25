@@ -10,13 +10,45 @@
   }
 }
 
+.dish-presentation {
+  display: flex;
+  width: 200%;
+  transform: translate(-50%, 0%);
+  animation: quickFadeIn 1.5s ease;
+
+  &--loading {
+    transform: translate(0%, 0%);
+  }
+
+  &--transition {
+    transition: 0.5s ease-in-out;
+  }
+
+  &--no-transition {
+    transition: 0 !important;
+  }
+}
+
 .dish-display-container {
+  min-width: 50%;
+  max-width: 50%;
   display: grid;
   grid-template-columns: 1fr;
   margin-top: 50px !important;
-  animation-name: quickFadeIn;
-  animation-duration: 1.3s;
   min-height: calc(100vh - 90px);
+
+  &--loading {
+    transition: 0;
+    opacity: 0;
+  }
+
+  &--no-transition {
+    transition: 0 !important;
+  }
+
+  &--transition {
+    transition: 0.5s;
+  }
 
   h1 {
     font-weight: 600;
@@ -34,6 +66,14 @@
 
   img {
     width: 100%;
+  }
+}
+
+.dish-display-container-prev {
+  opacity: 0;
+
+  &--loading {
+    opacity: 1;
   }
 }
 
