@@ -43,8 +43,9 @@
   font-weight: 600;
 
   &--spin {
+    pointer-events: none;
     i {
-      animation: spin 1s forwards;
+      animation: spin 1s forwards infinite;
     }
   }
 }

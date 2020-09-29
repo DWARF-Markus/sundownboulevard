@@ -5,13 +5,14 @@ import { getDish, getDishOffline, setStep } from "../../../actions/actions";
 import "./DishDisplay.scss";
 
 function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
-  let history = useHistory();
+  const history = useHistory();
 
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [initLoading, setInitLoading] = useState(true);
-  const [prevDish, setPrevDish] = useState({});
-  const [currDish, setCurrDish] = useState({});
+  const [prevDish, setPrevDish] = useState(null);
+  const [currDish, setCurrDish] = useState(null);
+  const [refreshCount, setRefreshCount] = useState(0);
 
   useEffect(() => {
     setStep(2);
@@ -31,12 +32,7 @@ function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      setPrevDish(reducer.dish);
-    }, 420);
-    setTimeout(() => {
-      setCurrDish(reducer.dish);
-    }, 890);
+    setPrevDish(reducer.dish);
   }, [reducer.dish]);
 
   const handleDishSubmit = useCallback(async () => {
@@ -50,24 +46,37 @@ function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
     history.push("/");
   }, []);
 
+  const startLoading = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      setButtonLoading(false);
+      setCurrDish(reducer.dish);
+    }, 1000);
+  };
+
   const handleNewDish = () => {
     setButtonLoading(true);
+    setRefreshCount(refreshCount + 1);
     if (reducer.networkConnection) {
       getDish();
 
       setPrevDish(reducer.dish);
     } else {
       getDishOffline();
+
+      setTimeout(() => {
+        setPrevDish(reducer.dish);
+        setLoading(true);
+      }, 500);
+
+      setTimeout(() => {
+        setLoading(false);
+        setButtonLoading(false);
+        setCurrDish(reducer.dish);
+      }, 1000);
     }
-
-    setTimeout(() => {
-      setLoading(true);
-    }, 1000);
-
-    setTimeout(() => {
-      setLoading(false);
-      setButtonLoading(false);
-    }, 2000);
   };
 
   if (initLoading) {
@@ -111,7 +120,13 @@ function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
             )}
           </div>
           <div className="dish-display-img p-1">
-            {prevDish !== null ? (
+            {prevDish !== null && reducer.networkConnection ? (
+              <img
+                onLoad={() => startLoading()}
+                src={prevDish.strMealThumb}
+                alt="image of meal"
+              />
+            ) : prevDish !== null ? (
               <img src={prevDish.strMealThumb} alt="image of meal" />
             ) : (
               <></>
