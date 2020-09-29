@@ -53,7 +53,7 @@ function DishDisplay({ getDish, setStep, getDishOffline, reducer }) {
       setLoading(false);
       setButtonLoading(false);
       setCurrDish(reducer.dish);
-    }, 1000);
+    }, 600);
   };
 
   const handleNewDish = () => {
